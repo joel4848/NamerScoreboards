@@ -3,6 +3,7 @@ package com.chyzman.namer.command;
 import com.chyzman.namer.Namer;
 import com.chyzman.namer.util.NickFormatter;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
@@ -13,6 +14,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -30,6 +32,7 @@ public class NamerScoreboardsCommand {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("namerscoreboards")
+                            // Player commands
                             .then(literal("set")
                                     .then(argument("nickname", StringArgumentType.greedyString())
                                             .executes(context -> {
@@ -56,7 +59,8 @@ public class NamerScoreboardsCommand {
                                         );
                                     })
                             )
-                            .then(literal("set_other")
+                            // Admin commands
+                            .then(literal("setPlayerNick")
                                     .requires(source -> source.hasPermissionLevel(2))
                                     .then(argument("player", EntityArgumentType.player())
                                             .then(argument("nickname", StringArgumentType.greedyString())
@@ -68,7 +72,7 @@ public class NamerScoreboardsCommand {
                                             )
                                     )
                             )
-                            .then(literal("clear_other")
+                            .then(literal("clearPlayerNick")
                                     .requires(source -> source.hasPermissionLevel(2))
                                     .then(argument("player", EntityArgumentType.player())
                                             .executes(context -> setNick(
@@ -78,17 +82,70 @@ public class NamerScoreboardsCommand {
                                             ))
                                     )
                             )
-                            .then(literal("allow_setting_own_nicknames")
+                            // Config commands
+                            .then(literal("allowSettingOwnNicknames")
                                     .requires(source -> source.hasPermissionLevel(2))
+                                    .executes(context -> {
+                                        boolean value = Namer.CONFIG.allowSettingOwnNicknames();
+                                        context.getSource().sendFeedback(
+                                                () -> Text.translatable("command.namer.allowSettingOwnNicknames.current", value ? "§aenabled" : "§cdisabled"),
+                                                true
+                                        );
+                                        return 1;
+                                    })
                                     .then(argument("value", BoolArgumentType.bool())
                                             .executes(context -> {
                                                 boolean value = BoolArgumentType.getBool(context, "value");
                                                 var option = Namer.CONFIG.optionForKey(Namer.CONFIG.keys.allowSettingOwnNicknames);
-                                                if (option != null) {
-                                                    option.set(value);
-                                                }
+                                                if (option != null) option.set(value);
                                                 context.getSource().sendFeedback(
-                                                        () -> Text.translatable("command.namer.allow_setting_own_nicknames." + (value ? "enabled" : "disabled")),
+                                                        () -> Text.translatable("command.namer.allowSettingOwnNicknames." + (value ? "enabled" : "disabled")),
+                                                        true
+                                                );
+                                                return 1;
+                                            })
+                                    )
+                            )
+                            .then(literal("maxNickLength")
+                                    .requires(source -> source.hasPermissionLevel(2))
+                                    .executes(context -> {
+                                        int value = Namer.CONFIG.maxNickLength();
+                                        context.getSource().sendFeedback(
+                                                () -> Text.translatable("command.namer.maxNickLength.current", "§a" + value),
+                                                true
+                                        );
+                                        return 1;
+                                    })
+                                    .then(argument("value", IntegerArgumentType.integer(0, 256))
+                                            .executes(context -> {
+                                                int value = IntegerArgumentType.getInteger(context, "value");
+                                                var option = Namer.CONFIG.optionForKey(Namer.CONFIG.keys.maxNickLength);
+                                                if (option != null) option.set(value);
+                                                context.getSource().sendFeedback(
+                                                        () -> Text.translatable("command.namer.maxNickLength.set", "§a" + value),
+                                                        true
+                                                );
+                                                return 1;
+                                            })
+                                    )
+                            )
+                            .then(literal("allowNickFormatting")
+                                    .requires(source -> source.hasPermissionLevel(2))
+                                    .executes(context -> {
+                                        boolean value = Namer.CONFIG.allowNickFormatting();
+                                        context.getSource().sendFeedback(
+                                                () -> Text.translatable("command.namer.allowNickFormatting.current", value ? "§aenabled" : "§cdisabled"),
+                                                true
+                                        );
+                                        return 1;
+                                    })
+                                    .then(argument("value", BoolArgumentType.bool())
+                                            .executes(context -> {
+                                                boolean value = BoolArgumentType.getBool(context, "value");
+                                                var option = Namer.CONFIG.optionForKey(Namer.CONFIG.keys.allowNickFormatting);
+                                                if (option != null) option.set(value);
+                                                context.getSource().sendFeedback(
+                                                        () -> Text.translatable("command.namer.allowNickFormatting." + (value ? "enabled" : "disabled")),
                                                         true
                                                 );
                                                 return 1;
@@ -105,26 +162,49 @@ public class NamerScoreboardsCommand {
         var self = Objects.equals(source.getEntity(), target);
         if (storage == null) {
             var message = Text.translatable("command.namer.nick.set.fail.unknown");
-            throw self ? SET_FAIL.create(message) : SET_FAIL_OTHER.create(target.getName(), message);
+            throw self ? SET_FAIL.create(message) : SET_FAIL_OTHER.create(
+                    Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
+                    message
+            );
         }
+
         var parsedNick = NickFormatter.parseNick(nick);
         var nickString = parsedNick.getString();
-        if (
-                nick == null ||
-                        nickString.isBlank() ||
-                        parsedNick.equals(target.getName())
-        ) {
+
+        // Clear nickname if null, blank, or same as username
+        if (nick == null || nickString.isBlank() || parsedNick.equals(target.getName())) {
             storage.clearNick(target);
-            source.sendFeedback(() -> self ? Text.translatable("command.namer.nick.clear.success") : Text.translatable("command.namer.nick.clear.success.other", target.getName()), true);
+            source.sendFeedback(() -> self
+                    ? Text.translatable("command.namer.nick.clear.success")
+                    : Text.translatable("command.namer.nick.clear.success.other",
+                    Text.literal(target.getName().getString()).formatted(Formatting.GOLD)
+            ), true);
             return 1;
         }
+
         int maxLength = Namer.CONFIG.maxNickLength();
         if (maxLength > 0 && nickString.length() > maxLength) {
-            var message = Text.translatable("command.namer.nick.set.fail.length", parsedNick, maxLength);
-            throw self ? SET_FAIL.create(message) : SET_FAIL_OTHER.create(target.getName(), message);
+            var message = Text.translatable("command.namer.nick.set.fail.length",
+                    Text.literal(parsedNick.getString()).formatted(Formatting.GOLD),
+                    Text.literal(String.valueOf(maxLength)).formatted(Formatting.GREEN)
+            );
+            throw self ? SET_FAIL.create(message) : SET_FAIL_OTHER.create(
+                    Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
+                    message
+            );
         }
+
         storage.setNick(target, nick);
-        source.sendFeedback(() -> self ? Text.translatable("command.namer.nick.set.success", parsedNick) : Text.translatable("command.namer.nick.set.success.other", target.getName(), parsedNick), true);
+
+        source.sendFeedback(() -> self
+                ? Text.translatable("command.namer.nick.set.success",
+                Text.literal(parsedNick.getString()).formatted(Formatting.GOLD)
+        )
+                : Text.translatable("command.namer.nick.set.success.other",
+                Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
+                Text.literal(parsedNick.getString()).formatted(Formatting.GOLD)
+        ), true);
+
         return 1;
     }
 }

@@ -1,20 +1,29 @@
 {
-  "command.namer.nick.set.success": "Set your nickname to %s",
-  "command.namer.nick.set.success.other": "Set nickname for %s to %s",
+  "command.namer.nick.set.success": "Set your nickname to §6%s",
+  "command.namer.nick.set.success.other": "Set nickname for §6%s§r to §6%s",
 
   "command.namer.nick.clear.success": "Cleared your nickname",
-  "command.namer.nick.clear.success.other": "Cleared nickname for %s",
+  "command.namer.nick.clear.success.other": "Cleared nickname for §6%s",
 
-  "command.namer.nick.set.fail": "Failed to set your nickname: %s",
-  "command.namer.nick.set.fail.other": "Failed to set nickname for %s: %s",
+  "command.namer.nick.set.fail": "Failed to set your nickname: §6%s",
+  "command.namer.nick.set.fail.other": "Failed to set nickname for §6%s§r: §6%s",
 
   "command.namer.nick.set.fail.unknown": "Unknown error occurred while setting your nickname",
-  "command.namer.nick.set.fail.length": "Nickname \"%s\" is longer that max nickname length (%s)",
+  "command.namer.nick.set.fail.length": "Nickname \"§6%s\" is longer than max nickname length (§a%s)",
 
   "command.namer.nick.no.permission": "You do not have permission to set your own nickname",
 
-  "command.namer.allow_setting_own_nicknames.enabled": "Players can now set their own nicknames",
-  "command.namer.allow_setting_own_nicknames.disabled": "Only operators can set nicknames now",
+  "command.namer.allowSettingOwnNicknames.enabled": "Players can now set their own nicknames (§aenabled§r)",
+  "command.namer.allowSettingOwnNicknames.disabled": "Players can no longer set their own nicknames (§cdisabled§r)",
+
+  "command.namer.maxNickLength.set": "Maximum nickname length set to §a%s",
+
+  "command.namer.allowNickFormatting.enabled": "Nickname formatting is now §aenabled§r",
+  "command.namer.allowNickFormatting.disabled": "Nickname formatting is now §cdisabled§r",
+
+  "command.namer.allowSettingOwnNicknames.current": "Allow setting own nicknames is currently %s",
+  "command.namer.maxNickLength.current": "Maximum nickname length is currently %s",
+  "command.namer.allowNickFormatting.current": "Nickname formatting is currently %s",
 
   "text.config.namer.title": "Namer Configuration",
 

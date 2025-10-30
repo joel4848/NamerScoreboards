@@ -13,7 +13,8 @@
     "common.SuggestionsBuilderAccessor"
   ],
   "client": [
-    "client.ClientCommandSourceMixin"
+    "client.ClientCommandSourceMixin",
+    "client.ScoreboardPlayerListEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

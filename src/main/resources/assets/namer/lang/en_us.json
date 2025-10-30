@@ -11,6 +11,10 @@
   "command.namer.nick.set.fail.unknown": "Unknown error occurred while setting your nickname",
   "command.namer.nick.set.fail.length": "Nickname \"%s\" is longer that max nickname length (%s)",
 
+  "command.namer.nick.no.permission": "You do not have permission to set your own nickname",
+
+  "command.namer.allow_setting_own_nicknames.enabled": "Players can now set their own nicknames",
+  "command.namer.allow_setting_own_nicknames.disabled": "Only operators can set nicknames now",
 
   "text.config.namer.title": "Namer Configuration",
 
@@ -18,5 +22,8 @@
   "text.config.namer.option.maxNickLength.tooltip": "The maximum length of a nickname. Set to 0 for no limit.",
 
   "text.config.namer.option.allowNickFormatting": "Allow Nickname Formatting",
-  "text.config.namer.option.allowNickFormatting.tooltip": "If enabled, players can use placeholder api formatting in their nicknames"
+  "text.config.namer.option.allowNickFormatting.tooltip": "If enabled, players can use placeholder api formatting in their nicknames",
+
+  "text.config.namer.option.allowSettingOwnNicknames": "Allow Setting Own Nicknames",
+  "text.config.namer.option.allowSettingOwnNicknames.tooltip": "If enabled, all players can set their own nicknames. If disabled, only operators can set nicknames."
 }

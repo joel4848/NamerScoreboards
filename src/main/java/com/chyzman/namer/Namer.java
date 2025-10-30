@@ -2,7 +2,7 @@ package com.chyzman.namer;
 
 import com.chyzman.namer.NamerConfig;
 import com.chyzman.namer.cca.NickStorage;
-import com.chyzman.namer.command.NickCommand;
+import com.chyzman.namer.command.NamerScoreboardsCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.util.Identifier;
@@ -16,8 +16,7 @@ public class Namer implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        NickCommand.register();
-
+        NamerScoreboardsCommand.register();
 
         var allowNickFormatting = CONFIG.optionForKey(CONFIG.keys.allowNickFormatting);
         if (allowNickFormatting != null) {

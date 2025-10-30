@@ -16,4 +16,7 @@ public class NamerConfigModel {
 
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     public boolean allowNickFormatting = true;
+
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+    public boolean allowSettingOwnNicknames = true;
 }

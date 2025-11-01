@@ -96,8 +96,7 @@ public class NamerScoreboardsCommand {
                                     .then(argument("value", BoolArgumentType.bool())
                                             .executes(context -> {
                                                 boolean value = BoolArgumentType.getBool(context, "value");
-                                                var option = NamerScoreboards.CONFIG.optionForKey(NamerScoreboards.CONFIG.keys.allowSettingOwnNicknames);
-                                                if (option != null) option.set(value);
+                                                NamerScoreboards.CONFIG.setAllowSettingOwnNicknames(value);
                                                 context.getSource().sendFeedback(
                                                         () -> Text.translatable("command.namerscoreboards.allowSettingOwnNicknames." + (value ? "enabled" : "disabled")),
                                                         true
@@ -119,8 +118,7 @@ public class NamerScoreboardsCommand {
                                     .then(argument("value", IntegerArgumentType.integer(0, 256))
                                             .executes(context -> {
                                                 int value = IntegerArgumentType.getInteger(context, "value");
-                                                var option = NamerScoreboards.CONFIG.optionForKey(NamerScoreboards.CONFIG.keys.maxNickLength);
-                                                if (option != null) option.set(value);
+                                                NamerScoreboards.CONFIG.setMaxNickLength(value);
                                                 context.getSource().sendFeedback(
                                                         () -> Text.translatable("command.namerscoreboards.maxNickLength.set", "§a" + value),
                                                         true
@@ -142,8 +140,7 @@ public class NamerScoreboardsCommand {
                                     .then(argument("value", BoolArgumentType.bool())
                                             .executes(context -> {
                                                 boolean value = BoolArgumentType.getBool(context, "value");
-                                                var option = NamerScoreboards.CONFIG.optionForKey(NamerScoreboards.CONFIG.keys.allowNickFormatting);
-                                                if (option != null) option.set(value);
+                                                NamerScoreboards.CONFIG.setAllowNickFormatting(value);
                                                 context.getSource().sendFeedback(
                                                         () -> Text.translatable("command.namerscoreboards.allowNickFormatting." + (value ? "enabled" : "disabled")),
                                                         true

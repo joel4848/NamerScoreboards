@@ -1,68 +1,69 @@
 package com.joel4848.namerscoreboards;
 
-import blue.endless.jankson.Jankson;
-import io.wispforest.owo.config.ConfigWrapper;
-import io.wispforest.owo.config.Option;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 
-import java.util.function.Consumer;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-public class NamerScoreboardsConfig extends ConfigWrapper<NamerScoreboardsConfig> {
+public class NamerScoreboardsConfig {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("namerscoreboards.json");
 
-    public final Keys keys = new Keys();
+    public int maxNickLength = 0;
+    public boolean allowNickFormatting = true;
+    public boolean allowSettingOwnNicknames = true;
 
-    private final Option<java.lang.Integer> maxNickLength = this.optionForKey(this.keys.maxNickLength);
-    private final Option<java.lang.Boolean> allowNickFormatting = this.optionForKey(this.keys.allowNickFormatting);
-    private final Option<java.lang.Boolean> allowSettingOwnNicknames = this.optionForKey(this.keys.allowSettingOwnNicknames);
-
-    private NamerScoreboardsConfig() {
-        super(NamerScoreboardsConfig.class);
+    public static NamerScoreboardsConfig load() {
+        if (Files.exists(CONFIG_PATH)) {
+            try {
+                String json = Files.readString(CONFIG_PATH);
+                return GSON.fromJson(json, NamerScoreboardsConfig.class);
+            } catch (IOException e) {
+                System.err.println("Failed to load NamerScoreboards config, using defaults");
+                e.printStackTrace();
+            }
+        }
+        NamerScoreboardsConfig config = new NamerScoreboardsConfig();
+        config.save();
+        return config;
     }
 
-    private NamerScoreboardsConfig(Consumer<Jankson.Builder> janksonBuilder) {
-        super(NamerScoreboardsConfig.class, janksonBuilder);
-    }
-
-    public static NamerScoreboardsConfig createAndLoad() {
-        var wrapper = new NamerScoreboardsConfig();
-        wrapper.load();
-        return wrapper;
-    }
-
-    public static NamerScoreboardsConfig createAndLoad(Consumer<Jankson.Builder> janksonBuilder) {
-        var wrapper = new NamerScoreboardsConfig(janksonBuilder);
-        wrapper.load();
-        return wrapper;
+    public void save() {
+        try {
+            Files.writeString(CONFIG_PATH, GSON.toJson(this));
+        } catch (IOException e) {
+            System.err.println("Failed to save NamerScoreboards config");
+            e.printStackTrace();
+        }
     }
 
     public int maxNickLength() {
-        return maxNickLength.value();
-    }
-
-    public void maxNickLength(int value) {
-        maxNickLength.set(value);
+        return maxNickLength;
     }
 
     public boolean allowNickFormatting() {
-        return allowNickFormatting.value();
-    }
-
-    public void allowNickFormatting(boolean value) {
-        allowNickFormatting.set(value);
+        return allowNickFormatting;
     }
 
     public boolean allowSettingOwnNicknames() {
-        return allowSettingOwnNicknames.value();
+        return allowSettingOwnNicknames;
     }
 
-    public void allowSettingOwnNicknames(boolean value) {
-        allowSettingOwnNicknames.set(value);
+    public void setMaxNickLength(int value) {
+        this.maxNickLength = value;
+        save();
     }
 
+    public void setAllowNickFormatting(boolean value) {
+        this.allowNickFormatting = value;
+        save();
+    }
 
-    public static class Keys {
-        public final Option.Key maxNickLength = new Option.Key("maxNickLength");
-        public final Option.Key allowNickFormatting = new Option.Key("allowNickFormatting");
-        public final Option.Key allowSettingOwnNicknames = new Option.Key("allowSettingOwnNicknames");
+    public void setAllowSettingOwnNicknames(boolean value) {
+        this.allowSettingOwnNicknames = value;
+        save();
     }
 }
-

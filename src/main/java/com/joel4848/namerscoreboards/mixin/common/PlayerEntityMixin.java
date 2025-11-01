@@ -1,6 +1,7 @@
 package com.joel4848.namerscoreboards.mixin.common;
 
 import com.joel4848.namerscoreboards.pond.PlayerEntityDuck;
+import com.joel4848.namerscoreboards.util.NickFormatter;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -35,10 +36,11 @@ public abstract class PlayerEntityMixin extends Entity implements PlayerEntityDu
         var storage = NICK_STORAGE.getNullable(getScoreboard());
         if (storage == null) return original;
 
-        var nick = storage.getNick(getUuid());
-        if (nick == null) return original;
+        var rawNick = storage.getRawNick(getUuid());
+        if (rawNick == null) return original;
 
-        return nick;
+        // Parse the nickname on-demand (respects client/server formatting setting)
+        return NickFormatter.parseNick(rawNick);
     }
 
     @Override

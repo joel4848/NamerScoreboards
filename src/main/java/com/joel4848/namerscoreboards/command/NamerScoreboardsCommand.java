@@ -141,6 +141,10 @@ public class NamerScoreboardsCommand {
                                             .executes(context -> {
                                                 boolean value = BoolArgumentType.getBool(context, "value");
                                                 NamerScoreboards.CONFIG.setAllowNickFormatting(value);
+
+                                                // Broadcast config change to all connected clients
+                                                NamerScoreboards.broadcastConfigToAllClients(context.getSource().getServer());
+
                                                 context.getSource().sendFeedback(
                                                         () -> Text.translatable("command.namerscoreboards.allowNickFormatting." + (value ? "enabled" : "disabled")),
                                                         true

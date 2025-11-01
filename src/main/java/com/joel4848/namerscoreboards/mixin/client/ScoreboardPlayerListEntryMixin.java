@@ -1,5 +1,6 @@
 package com.joel4848.namerscoreboards.mixin.client;
 
+import com.joel4848.namerscoreboards.util.NickFormatter;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
@@ -34,8 +35,11 @@ public abstract class ScoreboardPlayerListEntryMixin {
         if (client.getNetworkHandler() != null) {
             for (PlayerListEntry playerListEntry : client.getNetworkHandler().getPlayerList()) {
                 if (playerListEntry.getProfile().getName().equals(ownerName)) {
-                    Text nick = storage.getNick(playerListEntry.getProfile().getId());
-                    if (nick != null) return nick;
+                    String rawNick = storage.getRawNick(playerListEntry.getProfile().getId());
+                    if (rawNick != null) {
+                        // Parse on client side (respects server's formatting setting)
+                        return NickFormatter.parseNick(rawNick);
+                    }
                     break;
                 }
             }

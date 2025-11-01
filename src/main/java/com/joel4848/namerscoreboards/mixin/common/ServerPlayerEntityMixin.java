@@ -29,9 +29,11 @@ public abstract class ServerPlayerEntityMixin extends Entity {
         var storage = NICK_STORAGE.getNullable(scoreboard);
         if (storage == null) return;
 
-        var nick = storage.getNick(getUuid());
-        if (nick == null) return;
+        var rawNick = storage.getRawNick(getUuid());
+        if (rawNick == null) return;
 
+        // Parse the nickname on-demand
+        Text nick = NickFormatter.parseNick(rawNick);
         cir.setReturnValue(NickFormatter.nickAndName(nick, ((PlayerEntityDuck)this).namerscoreboards$getActualDisplayName()));
     }
 }

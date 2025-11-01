@@ -2,6 +2,7 @@ package com.joel4848.namerscoreboards.mixin.client;
 
 import com.joel4848.namerscoreboards.impl.NickSuggestionData;
 import com.joel4848.namerscoreboards.pond.CommandSourceDuck;
+import com.joel4848.namerscoreboards.util.NickFormatter;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.network.ClientCommandSource;
@@ -28,7 +29,8 @@ public abstract class ClientCommandSourceMixin implements CommandSourceDuck {
         return networkHandler.getPlayerList().stream()
                 .map(playerListEntry -> {
                     var profile = playerListEntry.getProfile();
-                    var nick = storage == null ? null : storage.getNick(profile.getId());
+                    var rawNick = storage == null ? null : storage.getRawNick(profile.getId());
+                    var nick = rawNick == null ? null : NickFormatter.parseNick(rawNick);
                     return new NickSuggestionData(Text.literal(profile.getName()), nick);
                 })
                 .toList();
@@ -41,9 +43,9 @@ public abstract class ClientCommandSourceMixin implements CommandSourceDuck {
         if (storage == null) return originalResult;
         originalResult.addAll(
                 networkHandler.getPlayerList().stream()
-                        .map(playerListEntry -> storage.getNick(playerListEntry.getProfile().getId()))
+                        .map(playerListEntry -> storage.getRawNick(playerListEntry.getProfile().getId()))
                         .filter(Objects::nonNull)
-                        .map(Text::getString)
+                        .map(rawNick -> NickFormatter.parseNick(rawNick).getString())
                         .toList()
         );
         return originalResult.stream().distinct().toList();

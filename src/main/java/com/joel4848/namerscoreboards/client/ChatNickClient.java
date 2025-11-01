@@ -44,8 +44,8 @@ public final class ChatNickClient {
             var storage = NICK_STORAGE.getNullable(scoreboard);
             if (storage == null) return true;
 
-            Text nick = storage.getNick(sender.getId());
-            if (nick == null) {
+            String rawNick = storage.getRawNick(sender.getId());
+            if (rawNick == null) {
                 // No nickname — let vanilla display username: message
                 return true;
             }
@@ -64,7 +64,7 @@ public final class ChatNickClient {
             Formatting teamColor = (foundTeam != null && foundTeam.getColor() != null) ? foundTeam.getColor() : Formatting.WHITE;
 
             // Apply the team color to the nickname and the colon/separator
-            MutableText displayName = nick.copy().setStyle(Style.EMPTY.withColor(teamColor));
+            MutableText displayName = Text.literal(rawNick).setStyle(Style.EMPTY.withColor(teamColor));
             Text separator = Text.literal(": ").setStyle(Style.EMPTY.withColor(teamColor));
 
             // Message body (preserve signed message content when present)

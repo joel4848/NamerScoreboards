@@ -1,6 +1,5 @@
 package com.joel4848.namerscoreboards.cca;
 
-import com.joel4848.namerscoreboards.util.NickFormatter;
 import io.wispforest.endec.Endec;
 import io.wispforest.endec.impl.BuiltInEndecs;
 import io.wispforest.endec.impl.KeyedEndec;
@@ -10,7 +9,6 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.Component;
@@ -66,8 +64,7 @@ public class NickStorage implements Component, AutoSyncedComponent {
     }
 
     @Nullable
-    public Text getNick(UUID uuid) {
-        var nick = this.nicks.get(uuid);
-        return nick == null ? null : NickFormatter.parseNick(nick);
+    public String getRawNick(UUID uuid) {
+        return this.nicks.get(uuid);
     }
 }

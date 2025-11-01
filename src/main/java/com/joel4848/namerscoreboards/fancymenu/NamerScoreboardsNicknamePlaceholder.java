@@ -1,12 +1,12 @@
 package com.joel4848.namerscoreboards.fancymenu;
 
+import com.joel4848.namerscoreboards.util.NickFormatter;
 import de.keksuccino.fancymenu.customization.placeholder.DeserializedPlaceholderString;
 import de.keksuccino.fancymenu.customization.placeholder.Placeholder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,9 +63,10 @@ public class NamerScoreboardsNicknamePlaceholder extends Placeholder {
         // Find the player by username and get their nickname
         for (PlayerListEntry playerListEntry : networkHandler.getPlayerList()) {
             if (playerListEntry.getProfile().getName().equals(username)) {
-                Text nick = storage.getNick(playerListEntry.getProfile().getId());
-                if (nick != null) {
-                    return nick.getString();
+                String rawNick = storage.getRawNick(playerListEntry.getProfile().getId());
+                if (rawNick != null) {
+                    // Parse on client side (respects server's formatting setting)
+                    return NickFormatter.parseNick(rawNick).getString();
                 }
                 break;
             }

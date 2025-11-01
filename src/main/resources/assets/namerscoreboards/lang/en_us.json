@@ -1,0 +1,38 @@
+{
+  "command.namerscoreboards.nick.set.success": "Set your nickname to §6%s",
+  "command.namerscoreboards.nick.set.success.other": "Set nickname for §6%s§r to §6%s",
+
+  "command.namerscoreboards.nick.clear.success": "Cleared your nickname",
+  "command.namerscoreboards.nick.clear.success.other": "Cleared nickname for §6%s",
+
+  "command.namerscoreboards.nick.set.fail": "Failed to set your nickname: §6%s",
+  "command.namerscoreboards.nick.set.fail.other": "Failed to set nickname for §6%s§r: §6%s",
+
+  "command.namerscoreboards.nick.set.fail.unknown": "Unknown error occurred while setting your nickname",
+  "command.namerscoreboards.nick.set.fail.length": "Nickname \"§6%s\" is longer than max nickname length (§a%s)",
+
+  "command.namerscoreboards.nick.no.permission": "You do not have permission to set your own nickname",
+
+  "command.namerscoreboards.allowSettingOwnNicknames.enabled": "Players can now set their own nicknames (§aenabled§r)",
+  "command.namerscoreboards.allowSettingOwnNicknames.disabled": "Players can no longer set their own nicknames (§cdisabled§r)",
+
+  "command.namerscoreboards.maxNickLength.set": "Maximum nickname length set to §a%s",
+
+  "command.namerscoreboards.allowNickFormatting.enabled": "Nickname formatting is now §aenabled§r",
+  "command.namerscoreboards.allowNickFormatting.disabled": "Nickname formatting is now §cdisabled§r",
+
+  "command.namerscoreboards.allowSettingOwnNicknames.current": "Allow setting own nicknames is currently %s",
+  "command.namerscoreboards.maxNickLength.current": "Maximum nickname length is currently %s",
+  "command.namerscoreboards.allowNickFormatting.current": "Nickname formatting is currently %s",
+
+  "text.config.namerscoreboards.title": "NamerScoreboards Configuration",
+
+  "text.config.namerscoreboards.option.maxNickLength": "Max Nickname Length",
+  "text.config.namerscoreboards.option.maxNickLength.tooltip": "The maximum length of a nickname. Set to 0 for no limit.",
+
+  "text.config.namerscoreboards.option.allowNickFormatting": "Allow Nickname Formatting",
+  "text.config.namerscoreboards.option.allowNickFormatting.tooltip": "If enabled, players can use placeholder api formatting in their nicknames",
+
+  "text.config.namerscoreboards.option.allowSettingOwnNicknames": "Allow Setting Own Nicknames",
+  "text.config.namerscoreboards.option.allowSettingOwnNicknames.tooltip": "If enabled, all players can set their own nicknames. If disabled, only operators can set nicknames."
+}

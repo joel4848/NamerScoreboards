@@ -17,6 +17,9 @@
     "main": [
       "com.chyzman.namer.Namer"
     ],
+    "client": [
+      "com.chyzman.namer.NamerClient"
+    ],
     "cardinal-components": [
       "com.chyzman.namer.registry.CardinalComponentsRegistry"
     ]

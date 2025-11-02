@@ -13,6 +13,17 @@
 
   "command.namerscoreboards.nick.no.permission": "You do not have permission to set your own nickname",
 
+  "command.namerscoreboards.pronouns.set.success": "Set your pronouns to §6%s",
+  "command.namerscoreboards.pronouns.set.success.other": "Set pronouns for §6%s§r to §6%s",
+
+  "command.namerscoreboards.pronouns.clear.success": "Cleared your pronouns",
+  "command.namerscoreboards.pronouns.clear.success.other": "Cleared pronouns for §6%s",
+
+  "command.namerscoreboards.pronouns.set.fail": "Failed to set your pronouns: §6%s",
+  "command.namerscoreboards.pronouns.set.fail.other": "Failed to set pronouns for §6%s§r: §6%s",
+
+  "command.namerscoreboards.pronouns.set.fail.unknown": "Unknown error occurred while setting your pronouns",
+
   "command.namerscoreboards.allowSettingOwnNicknames.enabled": "Players can now set their own nicknames (§aenabled§r)",
   "command.namerscoreboards.allowSettingOwnNicknames.disabled": "Players can no longer set their own nicknames (§cdisabled§r)",
 

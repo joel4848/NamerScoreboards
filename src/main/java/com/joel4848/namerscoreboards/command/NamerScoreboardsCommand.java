@@ -28,12 +28,15 @@ public class NamerScoreboardsCommand {
     private static final Dynamic2CommandExceptionType SET_FAIL_OTHER = new Dynamic2CommandExceptionType((a, b) -> Text.translatable("command.namerscoreboards.nick.set.fail.other", a, b));
     private static final SimpleCommandExceptionType NO_PERMISSION = new SimpleCommandExceptionType(Text.translatable("command.namerscoreboards.nick.no.permission"));
 
+    private static final DynamicCommandExceptionType PRONOUNS_SET_FAIL = new DynamicCommandExceptionType(o -> Text.translatable("command.namerscoreboards.pronouns.set.fail", o));
+    private static final Dynamic2CommandExceptionType PRONOUNS_SET_FAIL_OTHER = new Dynamic2CommandExceptionType((a, b) -> Text.translatable("command.namerscoreboards.pronouns.set.fail.other", a, b));
+
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("namerscoreboards")
-                            // Player commands
-                            .then(literal("set")
+                            // Player nickname commands
+                            .then(literal("setNick")
                                     .then(argument("nickname", StringArgumentType.greedyString())
                                             .executes(context -> {
                                                 if (!NamerScoreboards.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
@@ -47,7 +50,7 @@ public class NamerScoreboardsCommand {
                                             })
                                     )
                             )
-                            .then(literal("clear")
+                            .then(literal("clearNick")
                                     .executes(context -> {
                                         if (!NamerScoreboards.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
                                             throw NO_PERMISSION.create();
@@ -59,7 +62,34 @@ public class NamerScoreboardsCommand {
                                         );
                                     })
                             )
-                            // Admin commands
+                            // Player pronouns commands
+                            .then(literal("setPronouns")
+                                    .then(argument("pronouns", StringArgumentType.greedyString())
+                                            .executes(context -> {
+                                                if (!NamerScoreboards.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
+                                                    throw NO_PERMISSION.create();
+                                                }
+                                                return setPronouns(
+                                                        context.getSource(),
+                                                        context.getSource().getPlayerOrThrow(),
+                                                        StringArgumentType.getString(context, "pronouns")
+                                                );
+                                            })
+                                    )
+                            )
+                            .then(literal("clearPronouns")
+                                    .executes(context -> {
+                                        if (!NamerScoreboards.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
+                                            throw NO_PERMISSION.create();
+                                        }
+                                        return setPronouns(
+                                                context.getSource(),
+                                                context.getSource().getPlayerOrThrow(),
+                                                null
+                                        );
+                                    })
+                            )
+                            // Admin nickname commands
                             .then(literal("setPlayerNick")
                                     .requires(source -> source.hasPermissionLevel(2))
                                     .then(argument("player", EntityArgumentType.player())
@@ -76,6 +106,29 @@ public class NamerScoreboardsCommand {
                                     .requires(source -> source.hasPermissionLevel(2))
                                     .then(argument("player", EntityArgumentType.player())
                                             .executes(context -> setNick(
+                                                    context.getSource(),
+                                                    EntityArgumentType.getPlayer(context, "player"),
+                                                    null
+                                            ))
+                                    )
+                            )
+                            // Admin pronouns commands
+                            .then(literal("setPlayerPronouns")
+                                    .requires(source -> source.hasPermissionLevel(2))
+                                    .then(argument("player", EntityArgumentType.player())
+                                            .then(argument("pronouns", StringArgumentType.greedyString())
+                                                    .executes(context -> setPronouns(
+                                                            context.getSource(),
+                                                            EntityArgumentType.getPlayer(context, "player"),
+                                                            StringArgumentType.getString(context, "pronouns")
+                                                    ))
+                                            )
+                                    )
+                            )
+                            .then(literal("clearPlayerPronouns")
+                                    .requires(source -> source.hasPermissionLevel(2))
+                                    .then(argument("player", EntityArgumentType.player())
+                                            .executes(context -> setPronouns(
                                                     context.getSource(),
                                                     EntityArgumentType.getPlayer(context, "player"),
                                                     null
@@ -204,6 +257,43 @@ public class NamerScoreboardsCommand {
                 : Text.translatable("command.namerscoreboards.nick.set.success.other",
                 Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
                 Text.literal(parsedNick.getString()).formatted(Formatting.GOLD)
+        ), true);
+
+        return 1;
+    }
+
+    public static int setPronouns(ServerCommandSource source, ServerPlayerEntity target, @Nullable String pronouns) throws CommandSyntaxException {
+        var server = source.getServer();
+        var storage = NICK_STORAGE.getNullable(server.getScoreboard());
+        var self = Objects.equals(source.getEntity(), target);
+        if (storage == null) {
+            var message = Text.translatable("command.namerscoreboards.pronouns.set.fail.unknown");
+            throw self ? PRONOUNS_SET_FAIL.create(message) : PRONOUNS_SET_FAIL_OTHER.create(
+                    Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
+                    message
+            );
+        }
+
+        // Clear pronouns if null or blank
+        if (pronouns == null || pronouns.isBlank()) {
+            storage.clearPronouns(target);
+            source.sendFeedback(() -> self
+                    ? Text.translatable("command.namerscoreboards.pronouns.clear.success")
+                    : Text.translatable("command.namerscoreboards.pronouns.clear.success.other",
+                    Text.literal(target.getName().getString()).formatted(Formatting.GOLD)
+            ), true);
+            return 1;
+        }
+
+        storage.setPronouns(target, pronouns);
+
+        source.sendFeedback(() -> self
+                ? Text.translatable("command.namerscoreboards.pronouns.set.success",
+                Text.literal(pronouns).formatted(Formatting.GOLD)
+        )
+                : Text.translatable("command.namerscoreboards.pronouns.set.success.other",
+                Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
+                Text.literal(pronouns).formatted(Formatting.GOLD)
         ), true);
 
         return 1;

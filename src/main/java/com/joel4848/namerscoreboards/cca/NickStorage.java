@@ -25,19 +25,23 @@ public class NickStorage implements Component, AutoSyncedComponent {
     @Nullable
     public final MinecraftServer server;
     private HashMap<UUID, String> nicks = new HashMap<>();
+    private HashMap<UUID, String> pronouns = new HashMap<>();
 
     //region ENDEC STUFF
 
     private static final KeyedEndec<HashMap<UUID, String>> NICKS = Endec.map(BuiltInEndecs.UUID, Endec.STRING).xmap(HashMap::new, hashMap -> hashMap).keyed("nicks", new HashMap<>());
+    private static final KeyedEndec<HashMap<UUID, String>> PRONOUNS = Endec.map(BuiltInEndecs.UUID, Endec.STRING).xmap(HashMap::new, hashMap -> hashMap).keyed("pronouns", new HashMap<>());
 
     @Override
     public void readFromNbt(NbtCompound tag, @NotNull RegistryWrapper.WrapperLookup registryLookup) {
         this.nicks = tag.get(NICKS);
+        this.pronouns = tag.get(PRONOUNS);
     }
 
     @Override
     public void writeToNbt(NbtCompound tag, @NotNull RegistryWrapper.WrapperLookup registryLookup) {
         tag.put(NICKS, this.nicks);
+        tag.put(PRONOUNS, this.pronouns);
     }
 
     //endregion
@@ -57,6 +61,16 @@ public class NickStorage implements Component, AutoSyncedComponent {
         syncPlayerNick(player);
     }
 
+    public void setPronouns(ServerPlayerEntity player, String pronouns) {
+        this.pronouns.put(player.getUuid(), pronouns);
+        syncPlayerNick(player);
+    }
+
+    public void clearPronouns(ServerPlayerEntity player) {
+        this.pronouns.remove(player.getUuid());
+        syncPlayerNick(player);
+    }
+
     public void syncPlayerNick(ServerPlayerEntity player) {
         NICK_STORAGE.sync(holder);
         if (server == null) return;
@@ -66,5 +80,10 @@ public class NickStorage implements Component, AutoSyncedComponent {
     @Nullable
     public String getRawNick(UUID uuid) {
         return this.nicks.get(uuid);
+    }
+
+    @Nullable
+    public String getRawPronouns(UUID uuid) {
+        return this.pronouns.get(uuid);
     }
 }

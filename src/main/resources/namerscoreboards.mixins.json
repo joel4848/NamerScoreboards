@@ -15,6 +15,7 @@
   "client": [
     "client.ClientCommandSourceMixin",
     "client.PlayerListEntryMixin",
+    "client.PlayerListHudMixin",
     "client.ScoreboardPlayerListEntryMixin"
   ],
   "injectors": {

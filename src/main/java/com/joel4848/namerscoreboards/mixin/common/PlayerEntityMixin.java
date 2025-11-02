@@ -1,6 +1,7 @@
 package com.joel4848.namerscoreboards.mixin.common;
 
 import com.joel4848.namerscoreboards.pond.PlayerEntityDuck;
+import com.joel4848.namerscoreboards.util.DisplayNameFormatter;
 import com.joel4848.namerscoreboards.util.NickFormatter;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.Entity;
@@ -28,6 +29,8 @@ public abstract class PlayerEntityMixin extends Entity implements PlayerEntityDu
 
     @Shadow public abstract Text getDisplayName();
 
+    @Shadow public abstract Text getName();
+
     @ModifyExpressionValue(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getName()Lnet/minecraft/text/Text;"))
     private Text makeNicksWork(Text original) {
         if (ignoreNick) return original;
@@ -37,10 +40,22 @@ public abstract class PlayerEntityMixin extends Entity implements PlayerEntityDu
         if (storage == null) return original;
 
         var rawNick = storage.getRawNick(getUuid());
-        if (rawNick == null) return original;
+        var rawPronouns = storage.getRawPronouns(getUuid());
 
-        // Parse the nickname on-demand (respects client/server formatting setting)
-        return NickFormatter.parseNick(rawNick);
+        // If pronouns exist but no nickname, use username as nickname
+        Text parsedNick;
+        if (rawNick != null) {
+            parsedNick = NickFormatter.parseNick(rawNick);
+        } else if (rawPronouns != null && !rawPronouns.isBlank()) {
+            parsedNick = getName(); // Use username
+        } else {
+            return original; // No nickname or pronouns
+        }
+
+        // Combine nickname and pronouns
+        Text combined = DisplayNameFormatter.combineNickAndPronouns(parsedNick, rawPronouns);
+
+        return combined != null ? combined : original;
     }
 
     @Override

@@ -18,7 +18,8 @@ public abstract class PlayerListEntryMixin {
     @Shadow public abstract GameProfile getProfile();
 
     /**
-     * Override the display name used in chat messages to show nicknames
+     * Override the display name used in chat messages to show ONLY nicknames.
+     * Pronouns are NOT shown in chat to keep it less cluttered.
      */
     @ModifyReturnValue(method = "getDisplayName", at = @At("RETURN"))
     private Text useNicknameInChat(Text original) {
@@ -39,8 +40,12 @@ public abstract class PlayerListEntryMixin {
         if (storage == null) return original;
 
         String rawNick = storage.getRawNick(getProfile().getId());
+
+        // Only return a nickname if one is actually set
+        // Do NOT use username as fallback here - that's only for display with pronouns
         if (rawNick == null) return original;
 
+        // Only show nickname in chat, NOT pronouns
         return NickFormatter.parseNick(rawNick);
     }
 }

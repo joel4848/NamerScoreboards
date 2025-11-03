@@ -1,10 +1,10 @@
 package com.joel4848.namerscoreboards.mixin.common;
 
-import com.joel4848.namerscoreboards.pond.PlayerEntityDuck;
-import com.joel4848.namerscoreboards.util.DisplayNameFormatter;
 import com.joel4848.namerscoreboards.util.NickFormatter;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,25 +27,58 @@ public abstract class ServerPlayerEntityMixin {
 
         var rawNick = storage.getRawNick(self.getUuid());
         var rawPronouns = storage.getRawPronouns(self.getUuid());
+        String username = self.getNameForScoreboard();
 
-        // If no nickname or pronouns, use default behavior
-        if (rawNick == null && (rawPronouns == null || rawPronouns.isBlank())) {
-            return;
+        // Parse nickname if present
+        Text parsedNick = rawNick != null ? NickFormatter.parseNick(rawNick) : null;
+
+        // Format the player list name
+        Text formatted = NickFormatter.formatPlayerListName(parsedNick, rawPronouns, username);
+
+        // If null, use vanilla behavior
+        if (formatted == null) return;
+
+        // Apply team color to the nickname part only (if nickname exists)
+        if (parsedNick != null) {
+            Team team = scoreboard.getScoreHolderTeam(username);
+            if (team != null) {
+                // We need to rebuild with team color on the nickname
+                boolean hasPronouns = rawPronouns != null && !rawPronouns.isBlank();
+
+                Text teamColoredNick = Team.decorateName(team, parsedNick);
+                Text result = Text.empty().append(teamColoredNick);
+
+                if (hasPronouns) {
+                    result = Text.empty().append(result).append(" ").append(Text.literal(rawPronouns).formatted(Formatting.WHITE));
+                }
+
+                result = Text.empty()
+                        .append(result)
+                        .append(" ")
+                        .append(
+                                Text.literal("(" + username + ")")
+                                        .formatted(Formatting.GRAY)
+                                        .formatted(Formatting.ITALIC)
+                        );
+
+                cir.setReturnValue(result);
+                return;
+            }
+        } else if (rawPronouns != null && !rawPronouns.isBlank()) {
+            // Pronouns only - apply team color to username
+            Team team = scoreboard.getScoreHolderTeam(username);
+            if (team != null) {
+                Text teamColoredUsername = Team.decorateName(team, Text.literal(username));
+                cir.setReturnValue(
+                        Text.empty()
+                                .append(teamColoredUsername)
+                                .append(" ")
+                                .append(Text.literal(rawPronouns).formatted(Formatting.WHITE))
+                );
+                return;
+            }
         }
 
-        // Parse the nickname on-demand, or use username if only pronouns exist
-        Text parsedNick;
-        if (rawNick != null) {
-            parsedNick = NickFormatter.parseNick(rawNick);
-        } else {
-            parsedNick = Text.literal(self.getNameForScoreboard());
-        }
-
-        // Combine nickname and pronouns
-        Text combined = DisplayNameFormatter.combineNickAndPronouns(parsedNick, rawPronouns);
-
-        if (combined == null) return;
-
-        cir.setReturnValue(NickFormatter.nickAndName(combined, ((PlayerEntityDuck)self).namerscoreboards$getActualDisplayName()));
+        cir.setReturnValue(formatted);
     }
 }

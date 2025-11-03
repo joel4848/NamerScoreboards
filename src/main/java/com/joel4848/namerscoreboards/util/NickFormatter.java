@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
 public class NickFormatter {
@@ -51,5 +52,47 @@ public class NickFormatter {
     public static Text nickAndName(@Nullable Text nick, Text name) {
         if (nick == null) return name;
         return Text.empty().append(nick).append(" (").append(name).append(")");
+    }
+
+    /**
+     * Formats a player's display for the player list (tab list)
+     * @param nickname The player's nickname (can be null)
+     * @param pronouns The player's pronouns (can be null)
+     * @param username The player's actual username
+     * @return Formatted text for display
+     */
+    public static Text formatPlayerListName(@Nullable Text nickname, @Nullable String pronouns, String username) {
+        boolean hasNickname = nickname != null;
+        boolean hasPronouns = pronouns != null && !pronouns.isBlank();
+
+        // Case 1: No nickname or pronouns - just return username (will be colored by team later)
+        if (!hasNickname && !hasPronouns) {
+            return null; // Return null to use vanilla behavior
+        }
+
+        // Case 2: Pronouns only - username (in team color) + pronouns (white)
+        if (!hasNickname && hasPronouns) {
+            return Text.literal(username).append(" ").append(Text.literal(pronouns).formatted(Formatting.WHITE));
+        }
+
+        // Case 3 & 4: Nickname present (with or without pronouns)
+        Text result = Text.empty().append(nickname);
+
+        // Add pronouns if present
+        if (hasPronouns) {
+            result = Text.empty().append(result).append(" ").append(Text.literal(pronouns).formatted(Formatting.WHITE));
+        }
+
+        // Add username in brackets (gray italic)
+        result = Text.empty()
+                .append(result)
+                .append(" ")
+                .append(
+                        Text.literal("(" + username + ")")
+                                .formatted(Formatting.GRAY)
+                                .formatted(Formatting.ITALIC)
+                );
+
+        return result;
     }
 }

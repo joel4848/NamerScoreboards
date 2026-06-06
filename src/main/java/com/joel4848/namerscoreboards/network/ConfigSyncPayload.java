@@ -6,11 +6,12 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 
-public record ConfigSyncPayload(boolean allowNickFormatting) implements CustomPayload {
+public record ConfigSyncPayload(boolean allowNickFormatting, boolean usePronounsEverywhere) implements CustomPayload {
     public static final CustomPayload.Id<ConfigSyncPayload> ID = new CustomPayload.Id<>(NamerScoreboards.id("config_sync"));
 
     public static final PacketCodec<RegistryByteBuf, ConfigSyncPayload> CODEC = PacketCodec.tuple(
             PacketCodecs.BOOL, ConfigSyncPayload::allowNickFormatting,
+            PacketCodecs.BOOL, ConfigSyncPayload::usePronounsEverywhere,
             ConfigSyncPayload::new
     );
 

@@ -15,6 +15,7 @@ public class NamerScoreboardsConfig {
     public int maxNickLength = 0;
     public boolean allowNickFormatting = true;
     public boolean allowSettingOwnNicknames = true;
+    public boolean usePronounsEverywhere = true;
 
     public static NamerScoreboardsConfig load() {
         if (Files.exists(CONFIG_PATH)) {
@@ -40,30 +41,13 @@ public class NamerScoreboardsConfig {
         }
     }
 
-    public int maxNickLength() {
-        return maxNickLength;
-    }
+    public int maxNickLength() { return maxNickLength; }
+    public boolean allowNickFormatting() { return allowNickFormatting; }
+    public boolean allowSettingOwnNicknames() { return allowSettingOwnNicknames; }
+    public boolean usePronounsEverywhere() { return usePronounsEverywhere; }
 
-    public boolean allowNickFormatting() {
-        return allowNickFormatting;
-    }
-
-    public boolean allowSettingOwnNicknames() {
-        return allowSettingOwnNicknames;
-    }
-
-    public void setMaxNickLength(int value) {
-        this.maxNickLength = value;
-        save();
-    }
-
-    public void setAllowNickFormatting(boolean value) {
-        this.allowNickFormatting = value;
-        save();
-    }
-
-    public void setAllowSettingOwnNicknames(boolean value) {
-        this.allowSettingOwnNicknames = value;
-        save();
-    }
+    public void setMaxNickLength(int value) { this.maxNickLength = value; save(); }
+    public void setAllowNickFormatting(boolean value) { this.allowNickFormatting = value; save(); }
+    public void setAllowSettingOwnNicknames(boolean value) { this.allowSettingOwnNicknames = value; save(); }
+    public void setUsePronounsEverywhere(boolean value) { this.usePronounsEverywhere = value; save(); }
 }

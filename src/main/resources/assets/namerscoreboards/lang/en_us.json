@@ -26,15 +26,18 @@
 
   "command.namerscoreboards.allowSettingOwnNicknames.enabled": "Players can now set their own nicknames (§aenabled§r)",
   "command.namerscoreboards.allowSettingOwnNicknames.disabled": "Players can no longer set their own nicknames (§cdisabled§r)",
+  "command.namerscoreboards.allowSettingOwnNicknames.current": "Allow setting own nicknames is currently %s",
 
   "command.namerscoreboards.maxNickLength.set": "Maximum nickname length set to §a%s",
+  "command.namerscoreboards.maxNickLength.current": "Maximum nickname length is currently %s",
 
   "command.namerscoreboards.allowNickFormatting.enabled": "Nickname formatting is now §aenabled§r",
   "command.namerscoreboards.allowNickFormatting.disabled": "Nickname formatting is now §cdisabled§r",
-
-  "command.namerscoreboards.allowSettingOwnNicknames.current": "Allow setting own nicknames is currently %s",
-  "command.namerscoreboards.maxNickLength.current": "Maximum nickname length is currently %s",
   "command.namerscoreboards.allowNickFormatting.current": "Nickname formatting is currently %s",
+
+  "command.namerscoreboards.usePronounsEverywhere.enabled": "Pronouns will now appear everywhere (§aenabled§r)",
+  "command.namerscoreboards.usePronounsEverywhere.disabled": "Pronouns will now only appear in scoreboards, tab list, nametags and chat (§cdisabled§r)",
+  "command.namerscoreboards.usePronounsEverywhere.current": "Use pronouns everywhere is currently %s",
 
   "text.config.namerscoreboards.title": "NamerScoreboards Configuration",
 
@@ -45,5 +48,8 @@
   "text.config.namerscoreboards.option.allowNickFormatting.tooltip": "If enabled, players can use placeholder api formatting in their nicknames",
 
   "text.config.namerscoreboards.option.allowSettingOwnNicknames": "Allow Setting Own Nicknames",
-  "text.config.namerscoreboards.option.allowSettingOwnNicknames.tooltip": "If enabled, all players can set their own nicknames. If disabled, only operators can set nicknames."
+  "text.config.namerscoreboards.option.allowSettingOwnNicknames.tooltip": "If enabled, all players can set their own nicknames. If disabled, only operators can set nicknames.",
+
+  "text.config.namerscoreboards.option.usePronounsEverywhere": "Use Pronouns Everywhere",
+  "text.config.namerscoreboards.option.usePronounsEverywhere.tooltip": "If enabled, pronouns appear everywhere (tellraw, title, etc.). If disabled, pronouns only appear in scoreboards, tab list, nametags and chat."
 }

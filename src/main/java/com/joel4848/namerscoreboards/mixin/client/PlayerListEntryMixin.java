@@ -1,5 +1,6 @@
 package com.joel4848.namerscoreboards.mixin.client;
 
+import com.joel4848.namerscoreboards.util.DisplayNameFormatter;
 import com.joel4848.namerscoreboards.util.NickFormatter;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.network.PlayerListEntry;
@@ -17,20 +18,11 @@ public abstract class PlayerListEntryMixin {
 
     @Shadow public abstract GameProfile getProfile();
 
-    /**
-     * Override the display name used in chat messages to show ONLY nicknames.
-     * Pronouns are NOT shown in chat to keep it less cluttered.
-     */
     @ModifyReturnValue(method = "getDisplayName", at = @At("RETURN"))
     private Text useNicknameInChat(Text original) {
-        if (original != null) {
-            // Player has a custom display name set, don't override
-            return original;
-        }
+        if (original != null) return original;
 
-        PlayerListEntry entry = (PlayerListEntry) (Object) this;
         net.minecraft.client.MinecraftClient client = net.minecraft.client.MinecraftClient.getInstance();
-
         if (client.world == null) return original;
 
         var scoreboard = client.world.getScoreboard();
@@ -40,12 +32,14 @@ public abstract class PlayerListEntryMixin {
         if (storage == null) return original;
 
         String rawNick = storage.getRawNick(getProfile().getId());
+        String rawPronouns = storage.getRawPronouns(getProfile().getId());
 
-        // Only return a nickname if one is actually set
-        // Do NOT use username as fallback here - that's only for display with pronouns
-        if (rawNick == null) return original;
+        if (rawNick == null && (rawPronouns == null || rawPronouns.isBlank())) return original;
 
-        // Only show nickname in chat, NOT pronouns
-        return NickFormatter.parseNick(rawNick);
+        Text parsedNick = rawNick != null
+                ? NickFormatter.parseNick(rawNick)
+                : Text.literal(getProfile().getName());
+
+        return DisplayNameFormatter.combineNickAndPronouns(parsedNick, rawPronouns);
     }
 }

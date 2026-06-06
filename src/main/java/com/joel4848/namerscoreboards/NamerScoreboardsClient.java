@@ -12,19 +12,19 @@ import net.fabricmc.loader.api.FabricLoader;
 public class NamerScoreboardsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // Handle config sync packets from server
         ClientPlayNetworking.registerGlobalReceiver(ConfigSyncPayload.ID, (payload, context) -> {
             context.client().execute(() -> {
-                ClientConfigHolder.setServerAllowNickFormatting(payload.allowNickFormatting());
+                ClientConfigHolder.setServerConfig(
+                        payload.allowNickFormatting(),
+                        payload.usePronounsEverywhere()
+                );
             });
         });
 
-        // Reset server config when disconnecting
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             ClientConfigHolder.reset();
         });
 
-        // Only register FancyMenu integration if FancyMenu is loaded
         if (FabricLoader.getInstance().isModLoaded("fancymenu")) {
             registerFancyMenuIntegration();
         }

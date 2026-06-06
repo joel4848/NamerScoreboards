@@ -26,9 +26,7 @@ public abstract class PlayerEntityMixin extends Entity implements PlayerEntityDu
     }
 
     @Shadow public abstract Scoreboard getScoreboard();
-
     @Shadow public abstract Text getDisplayName();
-
     @Shadow public abstract Text getName();
 
     @ModifyExpressionValue(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getName()Lnet/minecraft/text/Text;"))
@@ -42,18 +40,16 @@ public abstract class PlayerEntityMixin extends Entity implements PlayerEntityDu
         var rawNick = storage.getRawNick(getUuid());
         var rawPronouns = storage.getRawPronouns(getUuid());
 
-        // If pronouns exist but no nickname, use username as nickname
         Text parsedNick;
         if (rawNick != null) {
             parsedNick = NickFormatter.parseNick(rawNick);
         } else if (rawPronouns != null && !rawPronouns.isBlank()) {
-            parsedNick = getName(); // Use username
+            parsedNick = getName();
         } else {
-            return original; // No nickname or pronouns
+            return original;
         }
 
-        // Combine nickname and pronouns
-        Text combined = DisplayNameFormatter.combineNickAndPronouns(parsedNick, rawPronouns);
+        Text combined = DisplayNameFormatter.combineNickAndPronounsConditional(parsedNick, rawPronouns, false);
 
         return combined != null ? combined : original;
     }

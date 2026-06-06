@@ -14,6 +14,7 @@
   ],
   "client": [
     "client.ClientCommandSourceMixin",
+    "client.EntityRendererMixin",
     "client.PlayerListEntryMixin",
     "client.PlayerListHudMixin",
     "client.ScoreboardPlayerListEntryMixin"

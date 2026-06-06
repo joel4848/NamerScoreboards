@@ -15,10 +15,6 @@ import static com.joel4848.namerscoreboards.registry.CardinalComponentsRegistry.
 @Mixin(ScoreboardEntry.class)
 public abstract class ScoreboardPlayerListEntryMixin {
 
-    /**
-     * Replace the scoreboard display name with the player's nickname and pronouns, if available.
-     * This hooks into the `name()` method in ScoreboardEntry (Yarn 1.11-SNAPSHOT).
-     */
     @ModifyReturnValue(method = "name", at = @At("RETURN"))
     private Text useNicknameInScoreboard(Text original) {
         ScoreboardEntry entry = (ScoreboardEntry) (Object) this;
@@ -39,27 +35,14 @@ public abstract class ScoreboardPlayerListEntryMixin {
                     String rawNick = storage.getRawNick(playerListEntry.getProfile().getId());
                     String rawPronouns = storage.getRawPronouns(playerListEntry.getProfile().getId());
 
-                    // If no nickname or pronouns, use original
-                    if (rawNick == null && (rawPronouns == null || rawPronouns.isBlank())) {
-                        return original;
-                    }
+                    if (rawNick == null && (rawPronouns == null || rawPronouns.isBlank())) return original;
 
-                    // Parse nickname on client side (respects server's formatting setting)
-                    // If no nickname but pronouns exist, use username
-                    Text parsedNick;
-                    if (rawNick != null) {
-                        parsedNick = NickFormatter.parseNick(rawNick);
-                    } else {
-                        parsedNick = Text.literal(ownerName);
-                    }
+                    Text parsedNick = rawNick != null
+                            ? NickFormatter.parseNick(rawNick)
+                            : Text.literal(ownerName);
 
-                    // Combine nickname and pronouns
                     Text combined = DisplayNameFormatter.combineNickAndPronouns(parsedNick, rawPronouns);
-
-                    if (combined != null) {
-                        return combined;
-                    }
-                    break;
+                    return combined != null ? combined : original;
                 }
             }
         }

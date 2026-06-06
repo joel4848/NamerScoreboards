@@ -15,14 +15,11 @@ public class NamerScoreboards implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // Register payload type for server->client communication
         PayloadTypeRegistry.playS2C().register(ConfigSyncPayload.ID, ConfigSyncPayload.CODEC);
 
         NamerScoreboardsCommand.register();
 
-        // Send config to clients when they join - using INIT phase which happens after handshake
         ServerPlayConnectionEvents.INIT.register((handler, server) -> {
-            // Schedule for next tick to ensure connection is fully ready
             server.execute(() -> {
                 if (handler.player != null) {
                     sendConfigToClient(handler.player);
@@ -33,12 +30,18 @@ public class NamerScoreboards implements ModInitializer {
 
     public static void sendConfigToClient(net.minecraft.server.network.ServerPlayerEntity player) {
         if (ServerPlayNetworking.canSend(player, ConfigSyncPayload.ID)) {
-            ServerPlayNetworking.send(player, new ConfigSyncPayload(CONFIG.allowNickFormatting()));
+            ServerPlayNetworking.send(player, new ConfigSyncPayload(
+                    CONFIG.allowNickFormatting(),
+                    CONFIG.usePronounsEverywhere()
+            ));
         }
     }
 
     public static void broadcastConfigToAllClients(net.minecraft.server.MinecraftServer server) {
-        ConfigSyncPayload payload = new ConfigSyncPayload(CONFIG.allowNickFormatting());
+        ConfigSyncPayload payload = new ConfigSyncPayload(
+                CONFIG.allowNickFormatting(),
+                CONFIG.usePronounsEverywhere()
+        );
         for (var player : server.getPlayerManager().getPlayerList()) {
             if (ServerPlayNetworking.canSend(player, ConfigSyncPayload.ID)) {
                 ServerPlayNetworking.send(player, payload);

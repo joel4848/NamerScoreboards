@@ -35,7 +35,6 @@ public class NamerScoreboardsCommand {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                     literal("namerscoreboards")
-                            // Player nickname commands
                             .then(literal("setNick")
                                     .then(argument("nickname", StringArgumentType.greedyString())
                                             .executes(context -> {
@@ -62,7 +61,6 @@ public class NamerScoreboardsCommand {
                                         );
                                     })
                             )
-                            // Player pronouns commands
                             .then(literal("setPronouns")
                                     .then(argument("pronouns", StringArgumentType.greedyString())
                                             .executes(context -> {
@@ -89,7 +87,6 @@ public class NamerScoreboardsCommand {
                                         );
                                     })
                             )
-                            // Admin nickname commands
                             .then(literal("setPlayerNick")
                                     .requires(source -> source.hasPermissionLevel(2))
                                     .then(argument("player", EntityArgumentType.player())
@@ -112,7 +109,6 @@ public class NamerScoreboardsCommand {
                                             ))
                                     )
                             )
-                            // Admin pronouns commands
                             .then(literal("setPlayerPronouns")
                                     .requires(source -> source.hasPermissionLevel(2))
                                     .then(argument("player", EntityArgumentType.player())
@@ -135,7 +131,6 @@ public class NamerScoreboardsCommand {
                                             ))
                                     )
                             )
-                            // Config commands
                             .then(literal("allowSettingOwnNicknames")
                                     .requires(source -> source.hasPermissionLevel(2))
                                     .executes(context -> {
@@ -194,12 +189,32 @@ public class NamerScoreboardsCommand {
                                             .executes(context -> {
                                                 boolean value = BoolArgumentType.getBool(context, "value");
                                                 NamerScoreboards.CONFIG.setAllowNickFormatting(value);
-
-                                                // Broadcast config change to all connected clients
                                                 NamerScoreboards.broadcastConfigToAllClients(context.getSource().getServer());
-
                                                 context.getSource().sendFeedback(
                                                         () -> Text.translatable("command.namerscoreboards.allowNickFormatting." + (value ? "enabled" : "disabled")),
+                                                        true
+                                                );
+                                                return 1;
+                                            })
+                                    )
+                            )
+                            .then(literal("usePronounsEverywhere")
+                                    .requires(source -> source.hasPermissionLevel(2))
+                                    .executes(context -> {
+                                        boolean value = NamerScoreboards.CONFIG.usePronounsEverywhere();
+                                        context.getSource().sendFeedback(
+                                                () -> Text.translatable("command.namerscoreboards.usePronounsEverywhere.current", value ? "§aenabled" : "§cdisabled"),
+                                                true
+                                        );
+                                        return 1;
+                                    })
+                                    .then(argument("value", BoolArgumentType.bool())
+                                            .executes(context -> {
+                                                boolean value = BoolArgumentType.getBool(context, "value");
+                                                NamerScoreboards.CONFIG.setUsePronounsEverywhere(value);
+                                                NamerScoreboards.broadcastConfigToAllClients(context.getSource().getServer());
+                                                context.getSource().sendFeedback(
+                                                        () -> Text.translatable("command.namerscoreboards.usePronounsEverywhere." + (value ? "enabled" : "disabled")),
                                                         true
                                                 );
                                                 return 1;
@@ -225,7 +240,6 @@ public class NamerScoreboardsCommand {
         var parsedNick = NickFormatter.parseNick(nick);
         var nickString = parsedNick.getString();
 
-        // Clear nickname if null, blank, or same as username
         if (nick == null || nickString.isBlank() || parsedNick.equals(target.getName())) {
             storage.clearNick(target);
             source.sendFeedback(() -> self
@@ -249,11 +263,9 @@ public class NamerScoreboardsCommand {
         }
 
         storage.setNick(target, nick);
-
         source.sendFeedback(() -> self
                 ? Text.translatable("command.namerscoreboards.nick.set.success",
-                Text.literal(parsedNick.getString()).formatted(Formatting.GOLD)
-        )
+                Text.literal(parsedNick.getString()).formatted(Formatting.GOLD))
                 : Text.translatable("command.namerscoreboards.nick.set.success.other",
                 Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
                 Text.literal(parsedNick.getString()).formatted(Formatting.GOLD)
@@ -274,7 +286,6 @@ public class NamerScoreboardsCommand {
             );
         }
 
-        // Clear pronouns if null or blank
         if (pronouns == null || pronouns.isBlank()) {
             storage.clearPronouns(target);
             source.sendFeedback(() -> self
@@ -286,11 +297,9 @@ public class NamerScoreboardsCommand {
         }
 
         storage.setPronouns(target, pronouns);
-
         source.sendFeedback(() -> self
                 ? Text.translatable("command.namerscoreboards.pronouns.set.success",
-                Text.literal(pronouns).formatted(Formatting.GOLD)
-        )
+                Text.literal(pronouns).formatted(Formatting.GOLD))
                 : Text.translatable("command.namerscoreboards.pronouns.set.success.other",
                 Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
                 Text.literal(pronouns).formatted(Formatting.GOLD)

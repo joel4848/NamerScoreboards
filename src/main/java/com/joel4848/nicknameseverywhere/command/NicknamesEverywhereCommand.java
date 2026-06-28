@@ -266,11 +266,10 @@ public class NicknamesEverywhereCommand {
 
         storage.setNick(target, nick);
         source.sendFeedback(() -> self
-                ? Text.translatable("command.nicknameseverywhere.nick.set.success",
-                Text.literal(parsedNick.getString()).formatted(Formatting.GOLD))
+                ? Text.translatable("command.nicknameseverywhere.nick.set.success", parsedNick)
                 : Text.translatable("command.nicknameseverywhere.nick.set.success.other",
                 Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
-                Text.literal(parsedNick.getString()).formatted(Formatting.GOLD)
+                parsedNick
         ), true);
 
         return 1;
@@ -299,12 +298,15 @@ public class NicknamesEverywhereCommand {
         }
 
         storage.setPronouns(target, pronouns);
+
+        Text parsedPronouns = NickFormatter.parsePronouns(pronouns);
+
         source.sendFeedback(() -> self
                 ? Text.translatable("command.nicknameseverywhere.pronouns.set.success",
-                Text.literal(pronouns).formatted(Formatting.GOLD))
+                parsedPronouns)
                 : Text.translatable("command.nicknameseverywhere.pronouns.set.success.other",
                 Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
-                Text.literal(pronouns).formatted(Formatting.GOLD)
+                parsedPronouns
         ), true);
 
         return 1;

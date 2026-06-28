@@ -11,13 +11,21 @@ public class DisplayNameFormatter {
         if (nick == null && (pronouns == null || pronouns.isBlank())) {
             return null;
         }
+
+        // Safely parse the pronouns using NickFormatter to process style & gradient tags
+        Text parsedPronouns = (pronouns != null && !pronouns.isBlank())
+                ? NickFormatter.parsePronouns(pronouns)
+                : Text.empty();
+
         if (nick == null) {
-            return Text.literal(pronouns);
+            return parsedPronouns;
         }
         if (pronouns == null || pronouns.isBlank()) {
             return nick;
         }
-        return Text.empty().append(nick).append(" ").append(pronouns);
+
+        // Append the pre-parsed pronoun text component instead of the raw string
+        return Text.empty().append(nick).append(" ").append(parsedPronouns);
     }
 
     @Nullable

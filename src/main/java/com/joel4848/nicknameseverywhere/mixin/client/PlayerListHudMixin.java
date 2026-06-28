@@ -1,6 +1,5 @@
 package com.joel4848.nicknameseverywhere.mixin.client;
 
-import com.joel4848.nicknameseverywhere.util.DisplayNameFormatter;
 import com.joel4848.nicknameseverywhere.util.NickFormatter;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -44,11 +43,9 @@ public abstract class PlayerListHudMixin {
             return original.call(instance, entry);
         }
 
-        Text parsedNick = rawNick != null
-                ? NickFormatter.parseNick(rawNick)
-                : Text.literal(entry.getProfile().getName());
+        Text parsedNick = rawNick != null ? NickFormatter.parseNick(rawNick) : null;
 
-        Text combined = DisplayNameFormatter.combineNickAndPronouns(parsedNick, rawPronouns);
+        Text combined = NickFormatter.formatPlayerListName(parsedNick, rawPronouns, entry.getProfile().getName());
         if (combined == null) return original.call(instance, entry);
 
         Team team = scoreboard.getScoreHolderTeam(entry.getProfile().getName());

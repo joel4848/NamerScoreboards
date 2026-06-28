@@ -1,7 +1,5 @@
 package com.joel4848.nicknameseverywhere.mixin.common;
 
-import com.joel4848.nicknameseverywhere.pond.PlayerEntityDuck;
-import com.joel4848.nicknameseverywhere.util.DisplayNameFormatter;
 import com.joel4848.nicknameseverywhere.util.NickFormatter;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -30,13 +28,11 @@ public abstract class ServerPlayerEntityMixin {
 
         if (rawNick == null && (rawPronouns == null || rawPronouns.isBlank())) return;
 
-        Text parsedNick = rawNick != null
-                ? NickFormatter.parseNick(rawNick)
-                : Text.literal(self.getNameForScoreboard());
+        Text parsedNick = rawNick != null ? NickFormatter.parseNick(rawNick) : null;
 
-        Text combined = DisplayNameFormatter.combineNickAndPronouns(parsedNick, rawPronouns);
+        Text combined = NickFormatter.formatPlayerListName(parsedNick, rawPronouns, self.getNameForScoreboard());
         if (combined == null) return;
 
-        cir.setReturnValue(NickFormatter.nickAndName(combined, ((PlayerEntityDuck) self).nicknameseverywhere$getActualDisplayName()));
+        cir.setReturnValue(combined);
     }
 }

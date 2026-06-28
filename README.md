@@ -1,7 +1,7 @@
 
 # Nicknames Everywhere!
 
-Simple, powerful <font color="#FFFF00">f</font><font color="#CCFF33">o</font><font color="#99FF66">r</font><font color="#66FF99">m</font><font color="#33FFCC">a</font><font color="#00FFFF">t</font><font color="#33CCFF">t</font><font color="#6699FF">a</font><font color="#9966FF">b</font><font color="#CC33FF">l</font><font color="#FF00FF">e</font> nicknames and pronouns that display everywhere I could think of: nametags, chat, scoreboards, in commands, on the player list etc. Even comes with two FancyMenu placeholders!
+Simple, powerful <font color="#FFFF00">f</font><font color="#CCFF33">o</font><font color="#99FF66">r</font><font color="#66FF99">m</font><font color="#33FFCC">a</font><font color="#00FFFF">t</font><font color="#33CCFF">t</font><font color="#6699FF">a</font><font color="#9966FF">b</font><font color="#CC33FF">l</font><font color="#FF00FF">e</font> nicknames and pronouns that display everywhere I could think of: nametags, chat, scoreboards, in commands, on the player list etc. Even comes with a FancyMenu placeholder!
 
 ## Features
 
@@ -11,6 +11,14 @@ Simple, powerful <font color="#FFFF00">f</font><font color="#CCFF33">o</font><fo
 - Set other players' nicknames and pronouns (requires permission level 2)
 - Enable/disable nickname and pronoun formatting
 - Set maximum lengths for nicknames and pronouns
+
+### FancyMenu integration
+
+NicknamesEverywhere includes native placeholder support for the **FancyMenu** mod, allowing you to dynamically display player nicknames and pronouns directly inside custom menus, layouts, and text elements:
+
+> <font color="#7FEBE6">{</font><font color="#EB7F7F">"placeholder"</font><font color="#7F9EEB">:</font><font color="#E7C67D">"nicknameseverywhere_nickname"</font><font color="#7F9EEB">,</font><font color="#EB7F7F">"values"</font><font color="#7F9EEB">:</font><font color="#7FEBE6">{</font><font color="#EB7F7F">"username"</font><font color="#7F9EEB">:</font><font color="#E7C67D">"Joel4848"</font><font color="#7F9EEB">,</font><font color="#EB7F7F">"include_pronouns"</font><font color="#7F9EEB">:</font><font color="#E7C67D">"true"</font><font color="#7FEBE6">}}</font>
+- Returns a player's formatted nickname (and optionally their pronouns)
+
 ## Commands
 
 (All commands can use the alias `/nne`)

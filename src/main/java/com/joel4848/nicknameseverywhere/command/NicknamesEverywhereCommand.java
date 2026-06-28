@@ -255,7 +255,7 @@ public class NicknamesEverywhereCommand {
         int maxLength = NicknamesEverywhere.CONFIG.maxNickLength();
         if (maxLength > 0 && nickString.length() > maxLength) {
             var message = Text.translatable("command.nicknameseverywhere.nick.set.fail.length",
-                    Text.literal(parsedNick.getString()).formatted(Formatting.GOLD),
+                    parsedNick,
                     Text.literal(String.valueOf(maxLength)).formatted(Formatting.GREEN)
             );
             throw self ? SET_FAIL.create(message) : SET_FAIL_OTHER.create(

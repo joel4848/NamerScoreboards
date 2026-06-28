@@ -1,55 +1,55 @@
 {
-  "command.namerscoreboards.nick.set.success": "Set your nickname to §6%s",
-  "command.namerscoreboards.nick.set.success.other": "Set nickname for §6%s§r to §6%s",
+  "command.nicknameseverywhere.nick.set.success": "Set your nickname to §6%s",
+  "command.nicknameseverywhere.nick.set.success.other": "Set nickname for §6%s§r to §6%s",
 
-  "command.namerscoreboards.nick.clear.success": "Cleared your nickname",
-  "command.namerscoreboards.nick.clear.success.other": "Cleared nickname for §6%s",
+  "command.nicknameseverywhere.nick.clear.success": "Cleared your nickname",
+  "command.nicknameseverywhere.nick.clear.success.other": "Cleared nickname for §6%s",
 
-  "command.namerscoreboards.nick.set.fail": "Failed to set your nickname: §6%s",
-  "command.namerscoreboards.nick.set.fail.other": "Failed to set nickname for §6%s§r: §6%s",
+  "command.nicknameseverywhere.nick.set.fail": "Failed to set your nickname: §6%s",
+  "command.nicknameseverywhere.nick.set.fail.other": "Failed to set nickname for §6%s§r: §6%s",
 
-  "command.namerscoreboards.nick.set.fail.unknown": "Unknown error occurred while setting your nickname",
-  "command.namerscoreboards.nick.set.fail.length": "Nickname \"§6%s\" is longer than max nickname length (§a%s)",
+  "command.nicknameseverywhere.nick.set.fail.unknown": "Unknown error occurred while setting your nickname",
+  "command.nicknameseverywhere.nick.set.fail.length": "Nickname \"§6%s\" is longer than max nickname length (§a%s)",
 
-  "command.namerscoreboards.nick.no.permission": "You do not have permission to set your own nickname",
+  "command.nicknameseverywhere.nick.no.permission": "You do not have permission to set your own nickname",
 
-  "command.namerscoreboards.pronouns.set.success": "Set your pronouns to §6%s",
-  "command.namerscoreboards.pronouns.set.success.other": "Set pronouns for §6%s§r to §6%s",
+  "command.nicknameseverywhere.pronouns.set.success": "Set your pronouns to §6%s",
+  "command.nicknameseverywhere.pronouns.set.success.other": "Set pronouns for §6%s§r to §6%s",
 
-  "command.namerscoreboards.pronouns.clear.success": "Cleared your pronouns",
-  "command.namerscoreboards.pronouns.clear.success.other": "Cleared pronouns for §6%s",
+  "command.nicknameseverywhere.pronouns.clear.success": "Cleared your pronouns",
+  "command.nicknameseverywhere.pronouns.clear.success.other": "Cleared pronouns for §6%s",
 
-  "command.namerscoreboards.pronouns.set.fail": "Failed to set your pronouns: §6%s",
-  "command.namerscoreboards.pronouns.set.fail.other": "Failed to set pronouns for §6%s§r: §6%s",
+  "command.nicknameseverywhere.pronouns.set.fail": "Failed to set your pronouns: §6%s",
+  "command.nicknameseverywhere.pronouns.set.fail.other": "Failed to set pronouns for §6%s§r: §6%s",
 
-  "command.namerscoreboards.pronouns.set.fail.unknown": "Unknown error occurred while setting your pronouns",
+  "command.nicknameseverywhere.pronouns.set.fail.unknown": "Unknown error occurred while setting your pronouns",
 
-  "command.namerscoreboards.allowSettingOwnNicknames.enabled": "Players can now set their own nicknames (§aenabled§r)",
-  "command.namerscoreboards.allowSettingOwnNicknames.disabled": "Players can no longer set their own nicknames (§cdisabled§r)",
-  "command.namerscoreboards.allowSettingOwnNicknames.current": "Allow setting own nicknames is currently %s",
+  "command.nicknameseverywhere.allowSettingOwnNicknames.enabled": "Players can now set their own nicknames (§aenabled§r)",
+  "command.nicknameseverywhere.allowSettingOwnNicknames.disabled": "Players can no longer set their own nicknames (§cdisabled§r)",
+  "command.nicknameseverywhere.allowSettingOwnNicknames.current": "Allow setting own nicknames is currently %s",
 
-  "command.namerscoreboards.maxNickLength.set": "Maximum nickname length set to §a%s",
-  "command.namerscoreboards.maxNickLength.current": "Maximum nickname length is currently %s",
+  "command.nicknameseverywhere.maxNickLength.set": "Maximum nickname length set to §a%s",
+  "command.nicknameseverywhere.maxNickLength.current": "Maximum nickname length is currently %s",
 
-  "command.namerscoreboards.allowNickFormatting.enabled": "Nickname formatting is now §aenabled§r",
-  "command.namerscoreboards.allowNickFormatting.disabled": "Nickname formatting is now §cdisabled§r",
-  "command.namerscoreboards.allowNickFormatting.current": "Nickname formatting is currently %s",
+  "command.nicknameseverywhere.allowNickFormatting.enabled": "Nickname formatting is now §aenabled§r",
+  "command.nicknameseverywhere.allowNickFormatting.disabled": "Nickname formatting is now §cdisabled§r",
+  "command.nicknameseverywhere.allowNickFormatting.current": "Nickname formatting is currently %s",
 
-  "command.namerscoreboards.usePronounsEverywhere.enabled": "Pronouns will now appear everywhere (§aenabled§r)",
-  "command.namerscoreboards.usePronounsEverywhere.disabled": "Pronouns will now only appear in scoreboards, tab list, nametags and chat (§cdisabled§r)",
-  "command.namerscoreboards.usePronounsEverywhere.current": "Use pronouns everywhere is currently %s",
+  "command.nicknameseverywhere.usePronounsEverywhere.enabled": "Pronouns will now appear everywhere (§aenabled§r)",
+  "command.nicknameseverywhere.usePronounsEverywhere.disabled": "Pronouns will now only appear in scoreboards, tab list, nametags and chat (§cdisabled§r)",
+  "command.nicknameseverywhere.usePronounsEverywhere.current": "Use pronouns everywhere is currently %s",
 
-  "text.config.namerscoreboards.title": "NamerScoreboards Configuration",
+  "text.config.nicknameseverywhere.title": "NicknamesEverywhere Configuration",
 
-  "text.config.namerscoreboards.option.maxNickLength": "Max Nickname Length",
-  "text.config.namerscoreboards.option.maxNickLength.tooltip": "The maximum length of a nickname. Set to 0 for no limit.",
+  "text.config.nicknameseverywhere.option.maxNickLength": "Max Nickname Length",
+  "text.config.nicknameseverywhere.option.maxNickLength.tooltip": "The maximum length of a nickname. Set to 0 for no limit.",
 
-  "text.config.namerscoreboards.option.allowNickFormatting": "Allow Nickname Formatting",
-  "text.config.namerscoreboards.option.allowNickFormatting.tooltip": "If enabled, players can use placeholder api formatting in their nicknames",
+  "text.config.nicknameseverywhere.option.allowNickFormatting": "Allow Nickname Formatting",
+  "text.config.nicknameseverywhere.option.allowNickFormatting.tooltip": "If enabled, players can use placeholder api formatting in their nicknames",
 
-  "text.config.namerscoreboards.option.allowSettingOwnNicknames": "Allow Setting Own Nicknames",
-  "text.config.namerscoreboards.option.allowSettingOwnNicknames.tooltip": "If enabled, all players can set their own nicknames. If disabled, only operators can set nicknames.",
+  "text.config.nicknameseverywhere.option.allowSettingOwnNicknames": "Allow Setting Own Nicknames",
+  "text.config.nicknameseverywhere.option.allowSettingOwnNicknames.tooltip": "If enabled, all players can set their own nicknames. If disabled, only operators can set nicknames.",
 
-  "text.config.namerscoreboards.option.usePronounsEverywhere": "Use Pronouns Everywhere",
-  "text.config.namerscoreboards.option.usePronounsEverywhere.tooltip": "If enabled, pronouns appear everywhere (tellraw, title, etc.). If disabled, pronouns only appear in scoreboards, tab list, nametags and chat."
+  "text.config.nicknameseverywhere.option.usePronounsEverywhere": "Use Pronouns Everywhere",
+  "text.config.nicknameseverywhere.option.usePronounsEverywhere.tooltip": "If enabled, pronouns appear everywhere (tellraw, title, etc.). If disabled, pronouns only appear in scoreboards, tab list, nametags and chat."
 }

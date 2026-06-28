@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "namerscoreboards",
+  "id": "nicknames-everywhere",
   "version": "${version}",
-  "name": "NamerScoreboards",
+  "name": "Nicknames Everywhere",
   "description": "Personalisable nicknames that display everywhere I could think of",
   "authors": [
     "joel4848"
@@ -10,23 +10,23 @@
   "contact": {},
 
   "license": "LGPL-3.0",
-  "icon": "assets/namerscoreboards/icon.png",
+  "icon": "assets/nicknameseverywhere/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.joel4848.namerscoreboards.NamerScoreboards"
+      "com.joel4848.nicknameseverywhere.NicknamesEverywhere"
     ],
     "client": [
-      "com.joel4848.namerscoreboards.NamerScoreboardsClient"
+      "com.joel4848.nicknameseverywhere.NicknamesEverywhereClient"
     ],
     "cardinal-components": [
-      "com.joel4848.namerscoreboards.registry.CardinalComponentsRegistry"
+      "com.joel4848.nicknameseverywhere.registry.CardinalComponentsRegistry"
     ]
   },
 
   "mixins": [
-    "namerscoreboards.mixins.json"
+    "nicknameseverywhere.mixins.json"
   ],
 
   "depends": {
@@ -38,7 +38,7 @@
 
   "custom": {
     "cardinal-components": [
-      "namerscoreboards:storage"
+      "nicknameseverywhere:storage"
     ]
   }
 }

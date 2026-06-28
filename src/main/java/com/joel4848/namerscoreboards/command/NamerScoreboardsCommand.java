@@ -33,8 +33,8 @@ public class NamerScoreboardsCommand {
 
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(
-                    literal("namerscoreboards")
+            var commandNode = dispatcher.register(
+                    literal("nicknames")
                             .then(literal("setNick")
                                     .then(argument("nickname", StringArgumentType.greedyString())
                                             .executes(context -> {
@@ -222,6 +222,8 @@ public class NamerScoreboardsCommand {
                                     )
                             )
             );
+
+            dispatcher.register(literal("nne").redirect(commandNode));
         });
     }
 

@@ -2,6 +2,7 @@ package com.joel4848.nicknameseverywhere.command;
 
 import com.joel4848.nicknameseverywhere.NicknamesEverywhere;
 import com.joel4848.nicknameseverywhere.util.NickFormatter;
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -41,11 +42,12 @@ public class NicknamesEverywhereCommand {
                                                 if (!NicknamesEverywhere.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
                                                     throw NO_PERMISSION.create();
                                                 }
-                                                return setNick(
+                                                setNick(
                                                         context.getSource(),
                                                         context.getSource().getPlayerOrThrow(),
                                                         StringArgumentType.getString(context, "nickname")
                                                 );
+                                                return Command.SINGLE_SUCCESS;
                                             })
                                     )
                             )
@@ -54,11 +56,12 @@ public class NicknamesEverywhereCommand {
                                         if (!NicknamesEverywhere.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
                                             throw NO_PERMISSION.create();
                                         }
-                                        return setNick(
+                                        setNick(
                                                 context.getSource(),
                                                 context.getSource().getPlayerOrThrow(),
                                                 null
                                         );
+                                        return Command.SINGLE_SUCCESS;
                                     })
                             )
                             .then(literal("setPronouns")
@@ -67,11 +70,12 @@ public class NicknamesEverywhereCommand {
                                                 if (!NicknamesEverywhere.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
                                                     throw NO_PERMISSION.create();
                                                 }
-                                                return setPronouns(
+                                                setPronouns(
                                                         context.getSource(),
                                                         context.getSource().getPlayerOrThrow(),
                                                         StringArgumentType.getString(context, "pronouns")
                                                 );
+                                                return Command.SINGLE_SUCCESS;
                                             })
                                     )
                             )
@@ -80,145 +84,179 @@ public class NicknamesEverywhereCommand {
                                         if (!NicknamesEverywhere.CONFIG.allowSettingOwnNicknames() && !context.getSource().hasPermissionLevel(2)) {
                                             throw NO_PERMISSION.create();
                                         }
-                                        return setPronouns(
+                                        setPronouns(
                                                 context.getSource(),
                                                 context.getSource().getPlayerOrThrow(),
                                                 null
                                         );
+                                        return Command.SINGLE_SUCCESS;
                                     })
                             )
-                            .then(literal("setPlayerNick")
+
+                            .then(literal("admin")
                                     .requires(source -> source.hasPermissionLevel(2))
-                                    .then(argument("player", EntityArgumentType.player())
-                                            .then(argument("nickname", StringArgumentType.greedyString())
-                                                    .executes(context -> setNick(
-                                                            context.getSource(),
-                                                            EntityArgumentType.getPlayer(context, "player"),
-                                                            StringArgumentType.getString(context, "nickname")
-                                                    ))
+                                    .then(literal("setPlayerNick")
+                                            .then(argument("player", EntityArgumentType.player())
+                                                    .then(argument("nickname", StringArgumentType.greedyString())
+                                                            .executes(context -> {
+                                                                setNick(
+                                                                        context.getSource(),
+                                                                        EntityArgumentType.getPlayer(context, "player"),
+                                                                        StringArgumentType.getString(context, "nickname")
+                                                                );
+                                                                return Command.SINGLE_SUCCESS;
+                                                            })
+                                                    )
+                                            )
+                                    )
+                                    .then(literal("clearPlayerNick")
+                                            .then(argument("player", EntityArgumentType.player())
+                                                    .executes(context -> {
+                                                        setNick(
+                                                                context.getSource(),
+                                                                EntityArgumentType.getPlayer(context, "player"),
+                                                                null
+                                                        );
+                                                        return Command.SINGLE_SUCCESS;
+                                                    })
+                                            )
+                                    )
+                                    .then(literal("setPlayerPronouns")
+                                            .then(argument("player", EntityArgumentType.player())
+                                                    .then(argument("pronouns", StringArgumentType.greedyString())
+                                                            .executes(context -> {
+                                                                setPronouns(
+                                                                        context.getSource(),
+                                                                        EntityArgumentType.getPlayer(context, "player"),
+                                                                        StringArgumentType.getString(context, "pronouns")
+                                                                );
+                                                                return Command.SINGLE_SUCCESS;
+                                                            })
+                                                    )
+                                            )
+                                    )
+                                    .then(literal("clearPlayerPronouns")
+                                            .then(argument("player", EntityArgumentType.player())
+                                                    .executes(context -> {
+                                                        setPronouns(
+                                                                context.getSource(),
+                                                                EntityArgumentType.getPlayer(context, "player"),
+                                                                null
+                                                        );
+                                                        return Command.SINGLE_SUCCESS;
+                                                    })
                                             )
                                     )
                             )
-                            .then(literal("clearPlayerNick")
+
+                            .then(literal("config")
                                     .requires(source -> source.hasPermissionLevel(2))
-                                    .then(argument("player", EntityArgumentType.player())
-                                            .executes(context -> setNick(
-                                                    context.getSource(),
-                                                    EntityArgumentType.getPlayer(context, "player"),
-                                                    null
-                                            ))
-                                    )
-                            )
-                            .then(literal("setPlayerPronouns")
-                                    .requires(source -> source.hasPermissionLevel(2))
-                                    .then(argument("player", EntityArgumentType.player())
-                                            .then(argument("pronouns", StringArgumentType.greedyString())
-                                                    .executes(context -> setPronouns(
-                                                            context.getSource(),
-                                                            EntityArgumentType.getPlayer(context, "player"),
-                                                            StringArgumentType.getString(context, "pronouns")
-                                                    ))
+                                    .then(literal("allowSettingOwnNicknames")
+                                            .executes(context -> {
+                                                boolean value = NicknamesEverywhere.CONFIG.allowSettingOwnNicknames();
+                                                context.getSource().sendFeedback(
+                                                        () -> Text.translatable("command.nicknameseverywhere.allowSettingOwnNicknames.current", value ? "§aenabled" : "§cdisabled"),
+                                                        true
+                                                );
+                                                return Command.SINGLE_SUCCESS;
+                                            })
+                                            .then(argument("value", BoolArgumentType.bool())
+                                                    .executes(context -> {
+                                                        boolean value = BoolArgumentType.getBool(context, "value");
+                                                        NicknamesEverywhere.CONFIG.setAllowSettingOwnNicknames(value);
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.translatable("command.nicknameseverywhere.allowSettingOwnNicknames." + (value ? "enabled" : "disabled")),
+                                                                true
+                                                        );
+                                                        return Command.SINGLE_SUCCESS;
+                                                    })
                                             )
                                     )
-                            )
-                            .then(literal("clearPlayerPronouns")
-                                    .requires(source -> source.hasPermissionLevel(2))
-                                    .then(argument("player", EntityArgumentType.player())
-                                            .executes(context -> setPronouns(
-                                                    context.getSource(),
-                                                    EntityArgumentType.getPlayer(context, "player"),
-                                                    null
-                                            ))
-                                    )
-                            )
-                            .then(literal("allowSettingOwnNicknames")
-                                    .requires(source -> source.hasPermissionLevel(2))
-                                    .executes(context -> {
-                                        boolean value = NicknamesEverywhere.CONFIG.allowSettingOwnNicknames();
-                                        context.getSource().sendFeedback(
-                                                () -> Text.translatable("command.nicknameseverywhere.allowSettingOwnNicknames.current", value ? "§aenabled" : "§cdisabled"),
-                                                true
-                                        );
-                                        return 1;
-                                    })
-                                    .then(argument("value", BoolArgumentType.bool())
+                                    .then(literal("maxNickLength")
                                             .executes(context -> {
-                                                boolean value = BoolArgumentType.getBool(context, "value");
-                                                NicknamesEverywhere.CONFIG.setAllowSettingOwnNicknames(value);
+                                                int value = NicknamesEverywhere.CONFIG.maxNickLength();
                                                 context.getSource().sendFeedback(
-                                                        () -> Text.translatable("command.nicknameseverywhere.allowSettingOwnNicknames." + (value ? "enabled" : "disabled")),
+                                                        () -> Text.translatable("command.nicknameseverywhere.maxNickLength.current", "§a" + value),
                                                         true
                                                 );
-                                                return 1;
+                                                return Command.SINGLE_SUCCESS;
                                             })
+                                            .then(argument("value", IntegerArgumentType.integer(0, 256))
+                                                    .executes(context -> {
+                                                        int value = IntegerArgumentType.getInteger(context, "value");
+                                                        NicknamesEverywhere.CONFIG.setMaxNickLength(value);
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.translatable("command.nicknameseverywhere.maxNickLength.set", "§a" + value),
+                                                                true
+                                                        );
+                                                        return Command.SINGLE_SUCCESS;
+                                                    })
+                                            )
                                     )
-                            )
-                            .then(literal("maxNickLength")
-                                    .requires(source -> source.hasPermissionLevel(2))
-                                    .executes(context -> {
-                                        int value = NicknamesEverywhere.CONFIG.maxNickLength();
-                                        context.getSource().sendFeedback(
-                                                () -> Text.translatable("command.nicknameseverywhere.maxNickLength.current", "§a" + value),
-                                                true
-                                        );
-                                        return 1;
-                                    })
-                                    .then(argument("value", IntegerArgumentType.integer(0, 256))
+                                    .then(literal("maxPronounsLength")
                                             .executes(context -> {
-                                                int value = IntegerArgumentType.getInteger(context, "value");
-                                                NicknamesEverywhere.CONFIG.setMaxNickLength(value);
+                                                int value = NicknamesEverywhere.CONFIG.maxPronounsLength();
                                                 context.getSource().sendFeedback(
-                                                        () -> Text.translatable("command.nicknameseverywhere.maxNickLength.set", "§a" + value),
+                                                        () -> Text.translatable("command.nicknameseverywhere.maxPronounsLength.current", "§a" + value),
                                                         true
                                                 );
-                                                return 1;
+                                                return Command.SINGLE_SUCCESS;
                                             })
+                                            .then(argument("value", IntegerArgumentType.integer(0, 256))
+                                                    .executes(context -> {
+                                                        int value = IntegerArgumentType.getInteger(context, "value");
+                                                        NicknamesEverywhere.CONFIG.setMaxPronounsLength(value);
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.translatable("command.nicknameseverywhere.maxPronounsLength.set", "§a" + value),
+                                                                true
+                                                        );
+                                                        return Command.SINGLE_SUCCESS;
+                                                    })
+                                            )
                                     )
-                            )
-                            .then(literal("allowNickFormatting")
-                                    .requires(source -> source.hasPermissionLevel(2))
-                                    .executes(context -> {
-                                        boolean value = NicknamesEverywhere.CONFIG.allowNickFormatting();
-                                        context.getSource().sendFeedback(
-                                                () -> Text.translatable("command.nicknameseverywhere.allowNickFormatting.current", value ? "§aenabled" : "§cdisabled"),
-                                                true
-                                        );
-                                        return 1;
-                                    })
-                                    .then(argument("value", BoolArgumentType.bool())
+                                    .then(literal("allowNickFormatting")
                                             .executes(context -> {
-                                                boolean value = BoolArgumentType.getBool(context, "value");
-                                                NicknamesEverywhere.CONFIG.setAllowNickFormatting(value);
-                                                NicknamesEverywhere.broadcastConfigToAllClients(context.getSource().getServer());
+                                                boolean value = NicknamesEverywhere.CONFIG.allowNickFormatting();
                                                 context.getSource().sendFeedback(
-                                                        () -> Text.translatable("command.nicknameseverywhere.allowNickFormatting." + (value ? "enabled" : "disabled")),
+                                                        () -> Text.translatable("command.nicknameseverywhere.allowNickFormatting.current", value ? "§aenabled" : "§cdisabled"),
                                                         true
                                                 );
-                                                return 1;
+                                                return Command.SINGLE_SUCCESS;
                                             })
+                                            .then(argument("value", BoolArgumentType.bool())
+                                                    .executes(context -> {
+                                                        boolean value = BoolArgumentType.getBool(context, "value");
+                                                        NicknamesEverywhere.CONFIG.setAllowNickFormatting(value);
+                                                        NicknamesEverywhere.broadcastConfigToAllClients(context.getSource().getServer());
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.translatable("command.nicknameseverywhere.allowNickFormatting." + (value ? "enabled" : "disabled")),
+                                                                true
+                                                        );
+                                                        return Command.SINGLE_SUCCESS;
+                                                    })
+                                            )
                                     )
-                            )
-                            .then(literal("usePronounsEverywhere")
-                                    .requires(source -> source.hasPermissionLevel(2))
-                                    .executes(context -> {
-                                        boolean value = NicknamesEverywhere.CONFIG.usePronounsEverywhere();
-                                        context.getSource().sendFeedback(
-                                                () -> Text.translatable("command.nicknameseverywhere.usePronounsEverywhere.current", value ? "§aenabled" : "§cdisabled"),
-                                                true
-                                        );
-                                        return 1;
-                                    })
-                                    .then(argument("value", BoolArgumentType.bool())
+                                    .then(literal("usePronounsEverywhere")
                                             .executes(context -> {
-                                                boolean value = BoolArgumentType.getBool(context, "value");
-                                                NicknamesEverywhere.CONFIG.setUsePronounsEverywhere(value);
-                                                NicknamesEverywhere.broadcastConfigToAllClients(context.getSource().getServer());
+                                                boolean value = NicknamesEverywhere.CONFIG.usePronounsEverywhere();
                                                 context.getSource().sendFeedback(
-                                                        () -> Text.translatable("command.nicknameseverywhere.usePronounsEverywhere." + (value ? "enabled" : "disabled")),
+                                                        () -> Text.translatable("command.nicknameseverywhere.usePronounsEverywhere.current", value ? "§aenabled" : "§cdisabled"),
                                                         true
                                                 );
-                                                return 1;
+                                                return Command.SINGLE_SUCCESS;
                                             })
+                                            .then(argument("value", BoolArgumentType.bool())
+                                                    .executes(context -> {
+                                                        boolean value = BoolArgumentType.getBool(context, "value");
+                                                        NicknamesEverywhere.CONFIG.setUsePronounsEverywhere(value);
+                                                        NicknamesEverywhere.broadcastConfigToAllClients(context.getSource().getServer());
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.translatable("command.nicknameseverywhere.usePronounsEverywhere." + (value ? "enabled" : "disabled")),
+                                                                true
+                                                        );
+                                                        return Command.SINGLE_SUCCESS;
+                                                    })
+                                            )
                                     )
                             )
             );
@@ -227,7 +265,7 @@ public class NicknamesEverywhereCommand {
         });
     }
 
-    public static int setNick(ServerCommandSource source, ServerPlayerEntity target, @Nullable String nick) throws CommandSyntaxException {
+    public static void setNick(ServerCommandSource source, ServerPlayerEntity target, @Nullable String nick) throws CommandSyntaxException {
         var server = source.getServer();
         var storage = NICK_STORAGE.getNullable(server.getScoreboard());
         var self = Objects.equals(source.getEntity(), target);
@@ -249,7 +287,7 @@ public class NicknamesEverywhereCommand {
                     : Text.translatable("command.nicknameseverywhere.nick.clear.success.other",
                     Text.literal(target.getName().getString()).formatted(Formatting.GOLD)
             ), true);
-            return 1;
+            return;
         }
 
         int maxLength = NicknamesEverywhere.CONFIG.maxNickLength();
@@ -271,11 +309,9 @@ public class NicknamesEverywhereCommand {
                 Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
                 parsedNick
         ), true);
-
-        return 1;
     }
 
-    public static int setPronouns(ServerCommandSource source, ServerPlayerEntity target, @Nullable String pronouns) throws CommandSyntaxException {
+    public static void setPronouns(ServerCommandSource source, ServerPlayerEntity target, @Nullable String pronouns) throws CommandSyntaxException {
         var server = source.getServer();
         var storage = NICK_STORAGE.getNullable(server.getScoreboard());
         var self = Objects.equals(source.getEntity(), target);
@@ -294,12 +330,25 @@ public class NicknamesEverywhereCommand {
                     : Text.translatable("command.nicknameseverywhere.pronouns.clear.success.other",
                     Text.literal(target.getName().getString()).formatted(Formatting.GOLD)
             ), true);
-            return 1;
+            return;
+        }
+
+        Text parsedPronouns = NickFormatter.parsePronouns(pronouns);
+        String pronounsString = parsedPronouns.getString();
+
+        int maxLength = NicknamesEverywhere.CONFIG.maxPronounsLength();
+        if (maxLength > 0 && pronounsString.length() > maxLength) {
+            var message = Text.translatable("command.nicknameseverywhere.pronouns.set.fail.length",
+                    parsedPronouns,
+                    Text.literal(String.valueOf(maxLength)).formatted(Formatting.GREEN)
+            );
+            throw self ? PRONOUNS_SET_FAIL.create(message) : PRONOUNS_SET_FAIL_OTHER.create(
+                    Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
+                    message
+            );
         }
 
         storage.setPronouns(target, pronouns);
-
-        Text parsedPronouns = NickFormatter.parsePronouns(pronouns);
 
         source.sendFeedback(() -> self
                 ? Text.translatable("command.nicknameseverywhere.pronouns.set.success",
@@ -308,7 +357,5 @@ public class NicknamesEverywhereCommand {
                 Text.literal(target.getName().getString()).formatted(Formatting.GOLD),
                 parsedPronouns
         ), true);
-
-        return 1;
     }
 }

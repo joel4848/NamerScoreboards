@@ -9,7 +9,7 @@
   "command.nicknameseverywhere.nick.set.fail.other": "Failed to set nickname for §6%s§r: §6%s",
 
   "command.nicknameseverywhere.nick.set.fail.unknown": "Unknown error occurred while setting your nickname",
-  "command.nicknameseverywhere.nick.set.fail.length": "Nickname \"§6%s\" is longer than max nickname length (§a%s)",
+  "command.nicknameseverywhere.nick.set.fail.length": "\"§6%s\" is longer than max nickname length (§a%s)",
 
   "command.nicknameseverywhere.nick.no.permission": "You do not have permission to set your own nickname",
 
@@ -23,6 +23,7 @@
   "command.nicknameseverywhere.pronouns.set.fail.other": "Failed to set pronouns for §6%s§r: §6%s",
 
   "command.nicknameseverywhere.pronouns.set.fail.unknown": "Unknown error occurred while setting your pronouns",
+  "command.nicknameseverywhere.pronouns.set.fail.length": "\"§6%s\" is longer than max nickname length (§a%s)",
 
   "command.nicknameseverywhere.allowSettingOwnNicknames.enabled": "Players can now set their own nicknames (§aenabled§r)",
   "command.nicknameseverywhere.allowSettingOwnNicknames.disabled": "Players can no longer set their own nicknames (§cdisabled§r)",
@@ -30,6 +31,9 @@
 
   "command.nicknameseverywhere.maxNickLength.set": "Maximum nickname length set to §a%s",
   "command.nicknameseverywhere.maxNickLength.current": "Maximum nickname length is currently %s",
+
+  "command.nicknameseverywhere.maxPronounsLength.set": "Maximum pronouns length set to §a%s",
+  "command.nicknameseverywhere.maxPronounsLength.current": "Maximum pronouns length is currently %s",
 
   "command.nicknameseverywhere.allowNickFormatting.enabled": "Nickname formatting is now §aenabled§r",
   "command.nicknameseverywhere.allowNickFormatting.disabled": "Nickname formatting is now §cdisabled§r",

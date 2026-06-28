@@ -11,12 +11,6 @@ public class ClientConfigHolder {
         hasReceivedServerConfig = true;
     }
 
-    // Keep old method for backwards compatibility with existing call sites
-    public static void setServerAllowNickFormatting(boolean value) {
-        serverAllowNickFormatting = value;
-        hasReceivedServerConfig = true;
-    }
-
     public static boolean getServerAllowNickFormatting() { return serverAllowNickFormatting; }
     public static boolean getServerUsePronounsEverywhere() { return serverUsePronounsEverywhere; }
     public static boolean hasReceivedServerConfig() { return hasReceivedServerConfig; }

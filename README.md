@@ -1,17 +1,37 @@
-# Namer Scoreboards
 
-Based on [Chyzman's Namer mod](https://github.com/chyzman/namer), Namer Scoreboards adds the functionality I needed for my community scoreboard, for nicknames to be displayed on scoreboards, nametags and in chat.
+# Nicknames Everywhere!
 
-It also allows for on-the-fly config changes.
+Simple, powerful <font color="#FFFF00">f</font><font color="#CCFF33">o</font><font color="#99FF66">r</font><font color="#66FF99">m</font><font color="#33FFCC">a</font><font color="#00FFFF">t</font><font color="#33CCFF">t</font><font color="#6699FF">a</font><font color="#9966FF">b</font><font color="#CC33FF">l</font><font color="#FF00FF">e</font> nicknames and pronouns that display everywhere I could think of: nametags, chat, scoreboards, in commands, on the player list etc. Even comes with two FancyMenu placeholders!
 
-### Commands:
+## Features
 
-- `/namerscoreboards set` and `/namerscoreboards clear` to set and clear your own nickname
-- `/namerscoreboards setPlayerNick` and `/namerscoreboards clearPlayerNick` to set and clear another player's nickname
-- `/namerscoreboards allowSettingOwnNicknames <enabled|disabled>` to enable/disable players setting their own nicknames (handy if your players are pests like mine)
-- `/namerscoreboards maxNickLength <0-255>` to set the maximum nickname length (0 = no limit). Note: this, annoyingly, includes formatting tags. I'll work on that for an update.
-- `/namerscoreboards allowNickFormatting <enabled|disabled>` to enable/disable formatting in nicknames (SFT/MiniMessage formatting seem to work)
+- Set separate nicknames and pronouns
+- Supports colourful formatting (I recommend https://www.birdflop.com/resources/rgb/ - use Colour Format -> MiniMessage)
+- Enable/disable players being able to set their own nicknames and pronouns
+- Set other players' nicknames and pronouns (requires permission level 2)
+- Enable/disable nickname and pronoun formatting
+- Set maximum lengths for nicknames and pronouns
+## Commands
 
-Players' nicknames will appear on scoreboards, their nametags, in chat and on the player list, and can be used to reference them in commands.
+(All commands can use the alias `/nne`)
 
-Namer Scoreboards is licenced under the GNU General Public License, as per the original Namer mod.
+### Client
+
+- `/nicknames setNick` and `/nicknames clearNick` to set and clear your nickname
+- `/nicknames setPronouns` and `/nicknames clearPronouns` to set and clear your pronouns
+
+### Admin
+
+- `/nicknames admin setPlayerNick` and `/nicknames admin clearPlayerNick` to set and clear another player's nickname
+- `/nicknames admin setPlayerPronouns` and `/nicknames admin clearPlayerPronouns` to set and clear another player's pronouns
+
+### Config
+
+- `/nicknames config allowNickFormatting <enabled|disabled>` to enable/disable formatting in nicknames/pronouns
+- `/nicknames config allowSettingOwnNicknames <enabled|disabled>` to enable/disable players setting their own nicknames/pronouns
+- `/nicknames config maxNickLength <0-255>` to set the maximum nickname length (0 = no limit)
+- `/nicknames config maxPronounsLength <0-255>` to set the maximum pronouns length (0 = no limit)
+- `/nicknames config usePronounsEverywhere <enabled|disabled>`  if disaabled, pronouns won't show in things like `/tellraw` or `/title` commands (I needed this for my server)
+## License
+
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

@@ -13,6 +13,7 @@ public class NicknamesEverywhereConfig {
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("nicknameseverywhere.json");
 
     public int maxNickLength = 0;
+    public int maxPronounsLength = 0;
     public boolean allowNickFormatting = true;
     public boolean allowSettingOwnNicknames = true;
     public boolean usePronounsEverywhere = true;
@@ -42,11 +43,13 @@ public class NicknamesEverywhereConfig {
     }
 
     public int maxNickLength() { return maxNickLength; }
+    public int maxPronounsLength() { return maxPronounsLength; }
     public boolean allowNickFormatting() { return allowNickFormatting; }
     public boolean allowSettingOwnNicknames() { return allowSettingOwnNicknames; }
     public boolean usePronounsEverywhere() { return usePronounsEverywhere; }
 
     public void setMaxNickLength(int value) { this.maxNickLength = value; save(); }
+    public void setMaxPronounsLength(int value) { this.maxPronounsLength = value; save(); }
     public void setAllowNickFormatting(boolean value) { this.allowNickFormatting = value; save(); }
     public void setAllowSettingOwnNicknames(boolean value) { this.allowSettingOwnNicknames = value; save(); }
     public void setUsePronounsEverywhere(boolean value) { this.usePronounsEverywhere = value; save(); }

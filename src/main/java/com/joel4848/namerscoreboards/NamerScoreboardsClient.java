@@ -1,9 +1,8 @@
 package com.joel4848.namerscoreboards;
 
 import com.joel4848.namerscoreboards.client.ClientConfigHolder;
-import com.joel4848.namerscoreboards.fancymenu.NamerScoreboardsNicknamePlaceholder;
+import com.joel4848.namerscoreboards.fancymenu.FancyMenuCompat; // Imported the new compat class
 import com.joel4848.namerscoreboards.network.ConfigSyncPayload;
-import de.keksuccino.fancymenu.customization.placeholder.PlaceholderRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -26,11 +25,7 @@ public class NamerScoreboardsClient implements ClientModInitializer {
         });
 
         if (FabricLoader.getInstance().isModLoaded("fancymenu")) {
-            registerFancyMenuIntegration();
+            FancyMenuCompat.registerFancyMenuIntegration();
         }
-    }
-
-    private void registerFancyMenuIntegration() {
-        PlaceholderRegistry.register(new NamerScoreboardsNicknamePlaceholder());
     }
 }

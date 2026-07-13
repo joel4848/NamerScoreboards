@@ -17,7 +17,8 @@
     "client.EntityRendererMixin",
     "client.PlayerListEntryMixin",
     "client.PlayerListHudMixin",
-    "client.ScoreboardPlayerListEntryMixin"
+    "client.ScoreboardPlayerListEntryMixin",
+    "client.SimpleVoiceChatPlayerStateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

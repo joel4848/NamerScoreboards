@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'fabric-loom' version '1.17-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -15,6 +15,19 @@ repositories {
     maven { url 'https://maven.ladysnake.org/releases' }
     maven {url "https://maven.nucleoid.xyz/" }
     maven {url "https://cursemaven.com"}
+    mavenCentral()
+    maven {
+        name = "henkelmax.public"
+        url = 'https://maven.maxhenkel.de/repository/public'
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+    mavenLocal()
 }
 
 dependencies {
@@ -34,6 +47,11 @@ dependencies {
     modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-scoreboard:${project.cca_version}")
 
     modImplementation "curse.maven:fancymenu-367706:6918990"
+
+    compileOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
+    modRuntimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
+
+    modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${voicechat_mod_version}"
 }
 
 processResources {
@@ -45,7 +63,8 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
+                "loader_version": project.loader_version,
+                "voicechat_api_version": voicechat_api_version
     }
 }
 
